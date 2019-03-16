@@ -12,33 +12,31 @@ public:
           y = 0,
           z = 0;
 
-    Vector(float x, float y, float z);
-
-    Vector(float xyz);
-
     /// Creates vector between two points
     Vector(const Vector& p1, const Vector& p2);
+    Vector(float x, float y, float z);
+    Vector(float xyz);
 
     ~Vector();
 
-    float getMagnitude();
     void normalize();
-    Vector cross(Vector other);
-    float dot(Vector other);
-    Vector reflect(const Vector& normal); // TODO
+    float getMagnitude();
+    float dot(const Vector &other);
+    Vector cross(const Vector &other);
+    Vector reflect(const Vector& normal);
 
     Vector operator+();
     Vector operator-();
-    void operator+=(Vector other);
-    void operator-=(Vector other);
-    void operator*=(Vector other);
-    void operator/=(Vector other);
+    void operator+=(const Vector &other);
+    void operator-=(const Vector &other);
+    void operator*=(const Vector &other);
+    void operator/=(const Vector &other);
 };
 
-Vector operator+(Vector left, Vector right);
-Vector operator-(Vector left, Vector right);
-Vector operator*(Vector left, Vector right);
-Vector operator/(Vector left, Vector right);
+Vector operator+(const Vector &left, const Vector &right);
+Vector operator-(const Vector &left, const Vector &right);
+Vector operator*(const Vector &left, const Vector &right);
+Vector operator/(const Vector &left, const Vector &right);
 std::ostream& operator<<(std::ostream &os, const Vector& vector);
 
 #endif //RENDERER_VECTOR_H
