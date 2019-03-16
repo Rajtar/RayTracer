@@ -25,21 +25,20 @@ public:
     void normalize();
     Vector cross(Vector other);
     float dot(Vector other);
+    Vector reflect(const Vector& normal); // TODO
 
     Vector operator+();
     Vector operator-();
-    Vector operator+(Vector other);
-    Vector operator-(Vector other);
-    Vector operator*(float num);
-    Vector operator/(float num);
-    Vector operator*(Vector other);
-    Vector operator/(Vector other);
     void operator+=(Vector other);
     void operator-=(Vector other);
     void operator*=(Vector other);
     void operator/=(Vector other);
 };
 
+Vector operator+(Vector left, Vector right);
+Vector operator-(Vector left, Vector right);
+Vector operator*(Vector left, Vector right);
+Vector operator/(Vector left, Vector right);
 std::ostream& operator<<(std::ostream &os, const Vector& vector);
 
 #endif //RENDERER_VECTOR_H

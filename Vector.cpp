@@ -34,7 +34,7 @@ float Vector::dot(Vector other) {
     return this->x * other.x + this->y * other.y + this->z * other.z;
 }
 
-//region Operators
+//region InstanceOperators
 
 Vector Vector::operator+() {
     return *this;
@@ -42,30 +42,6 @@ Vector Vector::operator+() {
 
 Vector Vector::operator-() {
     return Vector(-this->x, -this->y, -this->z);
-}
-
-Vector Vector::operator+(Vector other) {
-    return Vector(this->x + other.x, this->y + other.y, this->z + other.z);
-}
-
-Vector Vector::operator-(Vector other) {
-    return Vector(this->x - other.x, this->y - other.y, this->z - other.z);
-}
-
-Vector Vector::operator*(float num) {
-    return Vector(this->x * num, this->y * num, this->z * num);
-}
-
-Vector Vector::operator/(float num) {
-    return Vector(this->x / num, this->y / y, this->z / z);
-}
-
-Vector Vector::operator*(Vector other) {
-    return Vector(this->x * other.x, this->y * y, this->z * z);
-}
-
-Vector Vector::operator/(Vector other) {
-    return Vector(this->x / other.x, this->y / other.y, this->z / other.z);
 }
 
 void Vector::operator+=(Vector other) {
@@ -90,6 +66,26 @@ void Vector::operator/=(Vector other) {
     this->x /= other.x;
     this->y /= other.y;
     this->z /= other.z;
+}
+
+//endregion
+
+//region GeneralOperators
+
+Vector operator+(Vector left, Vector right) {
+    return Vector(left.x + right.x, left.y + right.y, left.z + right.z);
+}
+
+Vector operator-(Vector left, Vector right) {
+    return Vector(left.x - right.x, left.y - right.y, left.z - right.z);
+}
+
+Vector operator*(Vector left, Vector right) {
+    return Vector(left.x * right.x, left.y * right.y, left.z * right.z);
+}
+
+Vector operator/(Vector left, Vector right) {
+    return Vector(left.x / right.x, left.y / right.y, left.z / right.z);
 }
 
 std::ostream& operator<<(std::ostream &os, const Vector& vector) {
