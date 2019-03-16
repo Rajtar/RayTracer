@@ -2,6 +2,8 @@
 #define RENDERER_VECTOR_H
 
 
+#include <ostream>
+
 class Vector {
 
 public:
@@ -32,5 +34,6 @@ public:
     void operator/=(Vector other);
 };
 
+std::ostream& operator<<(std::ostream &os, const Vector& vector);
 
 #endif //RENDERER_VECTOR_H

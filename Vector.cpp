@@ -76,3 +76,7 @@ void Vector::operator/=(Vector other) {
     this->y /= other.y;
     this->z /= other.z;
 }
+
+std::ostream& operator<<(std::ostream &os, const Vector& vector) {
+    return os << "(" << vector.x << ", " << vector.y << ", " << vector.z << ")";
+}
