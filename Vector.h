@@ -13,10 +13,16 @@ public:
           z = 0;
 
     Vector(float x, float y, float z);
+
     Vector(float xyz);
+
+    /// Creates vector between two points
+    Vector(const Vector& p1, const Vector& p2);
+
     ~Vector();
 
     float getMagnitude();
+    void normalize();
     Vector cross(Vector other);
     float dot(Vector other);
 

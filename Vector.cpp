@@ -5,11 +5,24 @@ Vector::Vector(float x, float y, float z) : x(x), y(y), z(z) {}
 
 Vector::Vector(float xyz) : x(xyz), y(xyz), z(xyz) {}
 
+Vector::Vector(const Vector &p1, const Vector &p2) {
+    this->x = p2.x - p1.x;
+    this->y = p2.y - p1.y;
+    this->z = p2.z - p1.z;
+}
+
 Vector::~Vector() {
 }
 
 float Vector::getMagnitude() {
     return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+}
+
+void Vector::normalize() {
+    float magnitude = getMagnitude();
+    if(magnitude != 0) {
+        *this /= magnitude;
+    }
 }
 
 Vector Vector::cross(Vector other) {
@@ -20,6 +33,8 @@ Vector Vector::cross(Vector other) {
 float Vector::dot(Vector other) {
     return this->x * other.x + this->y * other.y + this->z * other.z;
 }
+
+//region Operators
 
 Vector Vector::operator+() {
     return *this;
@@ -80,3 +95,4 @@ void Vector::operator/=(Vector other) {
 std::ostream& operator<<(std::ostream &os, const Vector& vector) {
     return os << "(" << vector.x << ", " << vector.y << ", " << vector.z << ")";
 }
+//endregion
