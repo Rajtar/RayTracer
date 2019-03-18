@@ -14,8 +14,7 @@ public:
     Vector(const Vector& p1, const Vector& p2);
     Vector(float x, float y, float z);
     Vector(float xyz);
-
-    ~Vector();
+    Vector() = default;
 
     void normalize();
     float getMagnitude();

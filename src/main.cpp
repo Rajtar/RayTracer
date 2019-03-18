@@ -3,7 +3,8 @@
 
 int main() {
     Vector v = Vector(0, 1, 2);
-    std::cout << v + v << std::endl;
+    Vector a = Vector();
+    std::cout << a + 2 << std::endl;
     return 0;
 }
 
