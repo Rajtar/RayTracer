@@ -1,11 +1,17 @@
 #include <iostream>
-#include "Vector.h"
+#include <memory>
+#include "Vector3.h"
 #include "Sphere.h"
 
 int main() {
-    Vector v = Vector(0, 1, 2);
+    Vector3 v = Vector3(0, 0, 0);
     Sphere s = Sphere(v, 5);
-    std::cout << s.center << " : " << s.radius << std::endl;
+    Ray r = Ray(Vector3(0, 0, -20), Vector3(0, 0, 1));
+    
+    for (const auto &item : s.intersect(r)) {
+        std::cout<<item;
+    }
+
     return 0;
 }
 

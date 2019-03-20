@@ -1,16 +1,19 @@
 #ifndef RENDERER_SPHERE_H
 #define RENDERER_SPHERE_H
 
-
-#include "Vector.h"
+#include <vector>
+#include "Vector3.h"
+#include "Ray.h"
 
 class Sphere {
 public:
-    Vector center;
+    Vector3 center;
     float radius;
 
     Sphere() = default;
-    Sphere(Vector center, float radius);
+    Sphere(Vector3 center, float radius);
+
+    std::vector<Vector3> intersect(const Ray &ray);
 };
 
 
