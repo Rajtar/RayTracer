@@ -11,14 +11,14 @@ Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
 
 Vector3::Vector3(float xyz) : x(xyz), y(xyz), z(xyz) {}
 
-void Vector3::normalize() {
+Vector3 Vector3::normalize() const {
     float magnitude = getMagnitude();
     if (magnitude != 0) {
-        *this /= magnitude;
+        return (*this / magnitude);
     }
 }
 
-float Vector3::getMagnitude() {
+float Vector3::getMagnitude() const {
     return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 }
 
@@ -26,22 +26,22 @@ float Vector3::dot(const Vector3 &other) const {
     return this->x * other.x + this->y * other.y + this->z * other.z;
 }
 
-Vector3 Vector3::cross(const Vector3 &other) {
+Vector3 Vector3::cross(const Vector3 &other) const {
     return (this->y * other.z - this->z * other.y, this->z * other.x - this->x * other.z, this->x * other.y -
                                                                                           this->y * other.x);
 }
 
-Vector3 Vector3::reflect(const Vector3 &normal) {
+Vector3 Vector3::reflect(const Vector3 &normal) const {
     return *this - (2 * this->dot(normal) * normal);
 }
 
 //region InstanceOperators
 
-Vector3 Vector3::operator+() {
+Vector3 Vector3::operator+() const {
     return *this;
 }
 
-Vector3 Vector3::operator-() {
+Vector3 Vector3::operator-() const {
     return Vector3(-this->x, -this->y, -this->z);
 }
 

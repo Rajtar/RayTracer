@@ -13,17 +13,17 @@ public:
     /// Creates vector between two points
     Vector3(const Vector3& p1, const Vector3& p2);
     Vector3(float x, float y, float z);
-    Vector3(float xyz);
+    explicit Vector3(float xyz);
     Vector3() = default;
 
-    void normalize();
-    float getMagnitude();
+    Vector3 normalize() const;
+    float getMagnitude() const;
     float dot(const Vector3 &other) const;
-    Vector3 cross(const Vector3 &other);
-    Vector3 reflect(const Vector3& normal);
+    Vector3 cross(const Vector3 &other) const;
+    Vector3 reflect(const Vector3& normal) const;
 
-    Vector3 operator+();
-    Vector3 operator-();
+    Vector3 operator+() const;
+    Vector3 operator-() const;
     void operator+=(const Vector3 &other);
     void operator-=(const Vector3 &other);
     void operator*=(const Vector3 &other);
