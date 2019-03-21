@@ -7,10 +7,7 @@
 class Ray {
 public:
     Vector3 origin,
-           direction,
-           destination;
-
-    float distance = 0.0;
+           direction;
 
     Ray(Vector3 origin, Vector3 direction);
     Ray();
