@@ -13,7 +13,7 @@ public:
     /// Creates vector between two points
     Vector3(const Vector3& p1, const Vector3& p2);
     Vector3(float x, float y, float z);
-    explicit Vector3(float xyz);
+    Vector3(float xyz);
     Vector3() = default;
 
     Vector3 normalize() const;
