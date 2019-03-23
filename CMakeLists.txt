@@ -3,4 +3,4 @@ project(renderer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(renderer src/main.cpp src/Vector3.cpp src/Vector3.h src/Ray.cpp src/Ray.h src/Sphere.cpp src/Sphere.h src/Plane.cpp src/Plane.h src/bitmap_image.hpp)
+add_executable(renderer src/main.cpp src/geometry/Vector3.cpp src/geometry/Vector3.h src/geometry/Ray.cpp src/geometry/Ray.h src/geometry/Sphere.cpp src/geometry/Sphere.h src/geometry/Plane.cpp src/geometry/Plane.h src/image/bitmap_image.hpp src/image/BitmapImage.cpp src/image/BitmapImage.h src/LightIntensity.cpp src/LightIntensity.h src/image/Image.h src/image/Image.cpp)

@@ -1,28 +1,28 @@
 #include <iostream>
 #include <memory>
-#include "Vector3.h"
-#include "Sphere.h"
-#include "Plane.h"
-#include "bitmap_image.hpp"
+#include "geometry/Vector3.h"
+#include "geometry/Sphere.h"
+#include "geometry/Plane.h"
+#include "image/bitmap_image.hpp"
+#include "image/BitmapImage.h"
 
 int main() {
 
     const unsigned int width = 1920,
                        height = 1080;
 
-    bitmap_image image(width,height);
-    image.set_all_channels(0, 0, 0);
+    std::unique_ptr<Image> image(new BitmapImage(1920, 1080));
+    image->writeAll(LightIntensity(0.0, 0.0, 0.0));
 
-    for(int x=0; x < width; x++) {
-        for(int y=0; y < height; y++) {
+    for(unsigned int x=0; x < width; x++) {
+        for(unsigned int y=0; y < height; y++) {
             if(x % 2 == 0 && y % 2 == 0) {
-                image.set_pixel(x, y, rgb(255, 255, 255));
+                image->writePixel(x, y, LightIntensity(1.0, 0.0, 0.0));
             }
         }
     }
 
-    image.save_image("output.bmp");
-
+    image->saveToFile("output.bmp");
     return 0;
 }
 
