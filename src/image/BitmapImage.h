@@ -18,8 +18,6 @@ public:
 
 private:
     bitmap_image data;
-
-
 };
 
 

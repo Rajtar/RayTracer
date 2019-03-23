@@ -7,7 +7,6 @@
 #include "image/BitmapImage.h"
 
 int main() {
-
     const unsigned int width = 1920,
                        height = 1080;
 
