@@ -10,6 +10,9 @@ int main() {
     Ray r = Ray(Vector3(0, 0, -20), Vector3(0, 0, 20));
     Ray r1 = Ray(Vector3(0, 0, -20), Vector3(0, 1, 0));
     Ray r2 = Ray(Vector3(0, 0, 0), Vector3(0, 1, 1));
+    Ray r3 = Ray(Vector3(10, -5, 0), Vector3(0, 1, 0));
+
+    std::cout<<std::boolalpha;
 
     std::cout<<"r-sphere: ";
     for (const auto &item : s.intersect(r)) {
@@ -21,6 +24,10 @@ int main() {
     }
     std::cout<<std::endl<<"r2-sphere: ";
     for (const auto &item : s.intersect(r2)) {
+        std::cout<<item;
+    }
+    std::cout<<std::endl<<"r3-sphere: ";
+    for (const auto &item : s.intersect(r3)) {
         std::cout<<item;
     }
 
