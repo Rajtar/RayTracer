@@ -4,16 +4,17 @@
 
 #include "Vector3.h"
 #include "Ray.h"
+#include "Primitive.h"
 
-class Plane {
+class Plane : public Primitive {
 public:
-    /// Point that the plain contains
+    /// Point that the plane contains
     Vector3 point;
     Vector3 normal;
 
     Plane(const Vector3& point, const Vector3& normal);
 
-    bool intersect(const Ray &ray, Vector3& intersection);
+    bool intersect(const Ray &ray, std::vector<Vector3> &intersections) override;
 };
 
 

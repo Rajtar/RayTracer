@@ -4,7 +4,7 @@
 
 Sphere::Sphere(Vector3 center, float radius) : center(center), radius(radius) {}
 
-std::vector<Vector3> Sphere::intersect(const Ray &ray) {
+bool Sphere::intersect(const Ray &ray, std::vector<Vector3> &intersections) {
     Vector3 rayDirection(ray.direction.normalize());
 
     Vector3 oc = ray.origin - center;
@@ -12,8 +12,6 @@ std::vector<Vector3> Sphere::intersect(const Ray &ray) {
     float b = 2 * oc.dot(rayDirection);
     float c = oc.dot(oc) - radius * radius;
     double delta = b * b - 4 * a * c;
-
-    std::vector<Vector3> intersections;
 
     if (delta > 0) {
         float f0 = (-b - sqrt(delta)) / (2.0 * a);
@@ -26,16 +24,16 @@ std::vector<Vector3> Sphere::intersect(const Ray &ray) {
             intersections.push_back(f1 * rayDirection + ray.origin);
         }
 
-        return intersections;
+        return true;
     }
     if (delta == 0) {
         float f = (-b / (2.0 * a));
 
         intersections.push_back(f * rayDirection + ray.origin);
 
-        return intersections;
+        return true;
     }
     if (delta < 0) {
-        return intersections;
+        return true;
     }
 }

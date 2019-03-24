@@ -4,8 +4,9 @@
 #include <vector>
 #include "Vector3.h"
 #include "Ray.h"
+#include "Primitive.h"
 
-class Sphere {
+class Sphere : public Primitive {
 public:
     Vector3 center;
     float radius;
@@ -13,7 +14,7 @@ public:
     Sphere() = default;
     Sphere(Vector3 center, float radius);
 
-    std::vector<Vector3> intersect(const Ray &ray);
+    bool intersect(const Ray &ray, std::vector<Vector3> &intersections) override;
 };
 
 

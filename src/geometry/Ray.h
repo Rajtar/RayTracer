@@ -7,9 +7,10 @@
 class Ray {
 public:
     Vector3 origin,
+            target,
            direction;
 
-    Ray(Vector3 origin, Vector3 direction);
+    Ray(Vector3 origin, Vector3 target);
     Ray();
 };
 
