@@ -18,7 +18,7 @@ public:
     Camera(Vector3 position, Vector3 target, Vector3 up, float nearPlane, float farPlane);
     Camera() = default;
 
-    virtual void renderScene(const Scene &scene, std::unique_ptr<Image> image) = 0;
+    virtual void renderScene(const Scene &scene, std::unique_ptr<Image> &image) = 0;
 };
 
 

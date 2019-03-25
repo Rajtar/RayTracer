@@ -25,7 +25,7 @@ int main() {
 
     PerspectiveCamera camera(Vector3(0, 0, -2), Vector3(0, 0, -2), Vector3(0, 0, -2), 1, 1, 1);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
-//    camera.renderScene(scene, image);
+    camera.renderScene(scene, image);
 
     image->saveToFile("output.bmp");
     return 0;

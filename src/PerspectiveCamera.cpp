@@ -3,7 +3,7 @@
 PerspectiveCamera::PerspectiveCamera(Vector3 position, Vector3 target, Vector3 up, float nearPlane, float farPlane,
                                         float fov) : Camera(position, target, up, nearPlane, farPlane), fov(fov) {}
 
-void PerspectiveCamera::renderScene(const Scene &scene, std::unique_ptr<Image> image) {
+void PerspectiveCamera::renderScene(const Scene &scene, std::unique_ptr<Image> &image) {
     unsigned int imageWidth = image->getWidth();
     unsigned int imageHeight = image->getHeight();
 

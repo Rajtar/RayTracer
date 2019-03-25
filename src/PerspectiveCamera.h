@@ -11,7 +11,7 @@ public:
 
     PerspectiveCamera(Vector3 position, Vector3 target, Vector3 up, float nearPlane, float farPlane, float fov);
 
-    void renderScene(const Scene &scene, std::unique_ptr<Image> image) override;
+    void renderScene(const Scene &scene, std::unique_ptr<Image> &image) override;
 };
 
 
