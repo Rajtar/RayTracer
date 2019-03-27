@@ -4,7 +4,7 @@
 #include "image/bitmap_image.hpp"
 #include "image/BitmapImage.h"
 #include "Scene.h"
-#include "PerspectiveCamera.h"
+#include "camera/PerspectiveCamera.h"
 
 int main() {
     const unsigned int width = 500,
@@ -14,7 +14,7 @@ int main() {
     Scene scene;
     scene.AddPrimitive(&sphere);
 
-    PerspectiveCamera camera(Vector3(0, 0, -2), Vector3(0, 0, -2), Vector3(0, 0, -2), 1, 1, 1);
+    PerspectiveCamera camera(Vector3(0, 0, -20), Vector3(0, 0, 0), 2);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
     camera.renderScene(scene, image);
 

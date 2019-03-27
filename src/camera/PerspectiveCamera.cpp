@@ -1,8 +1,8 @@
 #include "PerspectiveCamera.h"
-#include "geometry/Sphere.h"
+#include "../geometry/Sphere.h"
 
-PerspectiveCamera::PerspectiveCamera(Vector3 position, Vector3 target, Vector3 up, float nearPlane, float farPlane,
-                                        float fov) : Camera(position, target, up, nearPlane, farPlane), fov(fov) {}
+PerspectiveCamera::PerspectiveCamera(Vector3 position, Vector3 direction, float viewportDistance, Vector3 up) : Camera(
+        position, direction, viewportDistance, up) {}
 
 void PerspectiveCamera::renderScene(const Scene &scene, std::unique_ptr<Image> &image) {
     unsigned int imageWidth = image->getWidth();
