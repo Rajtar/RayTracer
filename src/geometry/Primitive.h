@@ -7,7 +7,7 @@
 
 class Primitive {
 public:
-    virtual bool intersect(const Ray &ray, std::vector<Vector3> &intersections);
+    virtual bool intersect(const Ray &ray, std::vector<Vector3> &intersections) = 0;
 };
 
 

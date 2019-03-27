@@ -34,6 +34,6 @@ bool Sphere::intersect(const Ray &ray, std::vector<Vector3> &intersections) {
         return true;
     }
     if (delta < 0) {
-        return true;
+        return false;
     }
 }

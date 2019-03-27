@@ -3,16 +3,16 @@
 
 
 #include <list>
+#include <memory>
 #include "geometry/Primitive.h"
 
 class Scene {
 public:
-    std::list<Primitive> primitives;
+    std::list<Primitive*> primitives;   // TODO: remove raw pointer
 
-    Scene(const std::list<Primitive> &primitives);
     Scene() = default;
 
-    void AddPrimitive(const Primitive &primitive);
+    void AddPrimitive(Primitive* primitive);
 };
 
 

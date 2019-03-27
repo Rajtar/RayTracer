@@ -7,21 +7,12 @@
 #include "PerspectiveCamera.h"
 
 int main() {
-    const unsigned int width = 1920,
-                       height = 1080;
-    //image->writeAll(LightIntensity(0.0, 0.0, 0.0));
+    const unsigned int width = 500,
+                       height = 500;
 
-//    for(unsigned int x=0; x < width; x++) {
-//        for(unsigned int y=0; y < height; y++) {
-//            if(x % 10 == 0 && y % 10 == 0) {
-//                image->writePixel(x, y, LightIntensity(1.0, 0.0, 0.0));
-//            }
-//        }
-//    }
-
-    Sphere sphere(Vector3(0, 0, 2), 10);
+    Sphere sphere(Vector3(0, 0, 15), 2);
     Scene scene;
-    scene.AddPrimitive(sphere);
+    scene.AddPrimitive(&sphere);
 
     PerspectiveCamera camera(Vector3(0, 0, -2), Vector3(0, 0, -2), Vector3(0, 0, -2), 1, 1, 1);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
