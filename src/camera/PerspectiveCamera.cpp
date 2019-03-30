@@ -11,20 +11,20 @@ void PerspectiveCamera::renderScene(const Scene &scene, std::unique_ptr<Image> &
     float pixelHeight = 2.0F / imageWidth;
     float pixelWidth = 2.0F / imageHeight;
 
-    for(unsigned int i = 0; i < imageWidth; i++) {
-        for(unsigned int j = 0; j < imageHeight; j++) {
-            float xCenter = -1.0F + (i + 0.5F) * pixelWidth;
-            float yCenter = 1.0F - (j + 0.5F) * pixelHeight;
+    for(unsigned int x = 0; x < imageWidth; x++) {
+        for(unsigned int y = 0; y < imageHeight; y++) {
+            float xCenter = -1.0F + (x + 0.5F) * pixelWidth;
+            float yCenter = 1.0F - (y + 0.5F) * pixelHeight;
 
             Ray ray(this->position, Vector3(xCenter, yCenter, 0));
 
             std::vector<Vector3> intersections;
             for (const auto &primitive : scene.primitives) {
                 if(primitive->intersect(ray, intersections)) {
-                    image->writePixel(i, j, LightIntensity(1.0, 0.0, 0.0));
+                    image->writePixel(x, y, LightIntensity(1.0, 0.0, 0.0));
                 }
                 else {
-                    image->writePixel(i, j, LightIntensity(0.0, 0.0, 0.0));
+                    image->writePixel(x, y, LightIntensity(0.0, 0.0, 0.0));
                 }
             }
         }
