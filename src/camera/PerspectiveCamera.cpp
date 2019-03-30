@@ -1,5 +1,5 @@
+#include <iostream>
 #include "PerspectiveCamera.h"
-#include "../geometry/Sphere.h"
 
 PerspectiveCamera::PerspectiveCamera(Vector3 position, Vector3 direction, float viewportDistance, Vector3 up) : Camera(
         position, direction, viewportDistance, up) {}
@@ -16,7 +16,7 @@ void PerspectiveCamera::renderScene(const Scene &scene, std::unique_ptr<Image> &
             float xCenter = -1.0F + (x + 0.5F) * pixelWidth;
             float yCenter = 1.0F - (y + 0.5F) * pixelHeight;
 
-            Ray ray(this->position, Vector3(xCenter, yCenter, 0));
+            Ray ray(this->position, Vector3(xCenter, yCenter, 2));
 
             std::vector<Vector3> intersections;
             for (const auto &primitive : scene.primitives) {

@@ -14,7 +14,7 @@ int main() {
     Scene scene;
     scene.AddPrimitive(std::unique_ptr<Primitive>(&sphere));
 
-    PerspectiveCamera camera(Vector3(0, 0, -2), Vector3(0, 0, 0), 2);
+    PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
     camera.renderScene(scene, image);
 
