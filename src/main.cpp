@@ -10,11 +10,11 @@ int main() {
     const unsigned int width = 500,
                        height = 500;
 
-    Sphere sphere(Vector3(0, 0, 15), 2);
+    Sphere sphere(Vector3(0, 0, 10), 2);
     Scene scene;
-    scene.AddPrimitive(&sphere);
+    scene.AddPrimitive(std::unique_ptr<Primitive>(&sphere));
 
-    PerspectiveCamera camera(Vector3(0, 0, -20), Vector3(0, 0, 0), 2);
+    PerspectiveCamera camera(Vector3(0, 0, -2), Vector3(0, 0, 0), 2);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
     camera.renderScene(scene, image);
 

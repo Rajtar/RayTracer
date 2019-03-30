@@ -8,11 +8,11 @@
 
 class Scene {
 public:
-    std::list<Primitive*> primitives;   // TODO: remove raw pointer
+    std::list<std::unique_ptr<Primitive>> primitives;
 
     Scene() = default;
 
-    void AddPrimitive(Primitive* primitive);
+    void AddPrimitive(std::unique_ptr<Primitive> primitive);
 };
 
 

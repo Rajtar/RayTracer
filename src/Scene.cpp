@@ -1,8 +1,6 @@
 #include <algorithm>
 #include "Scene.h"
 
-void Scene::AddPrimitive(Primitive* primitive) {
-    //if(!(std::find(primitives.begin(), primitives.end(), primitive) != primitives.end())){
-        primitives.push_back(primitive);
-   // }
+void Scene::AddPrimitive(std::unique_ptr<Primitive> primitive) {
+        primitives.push_back(std::move(primitive));
 }
