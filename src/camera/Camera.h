@@ -14,10 +14,11 @@ public:
 
     float viewportDistance;
 
-    Camera(Vector3 position, Vector3 direction, float viewportDistance, Vector3 up = Vector3());
+    Camera(Vector3 position, Vector3 direction, float viewportDistance, Vector3 up = Vector3(0, 1, 0));
     Camera() = default;
 
-    virtual void renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage) = 0;
+    virtual void renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage);
+    virtual Ray getRay(float xCenter, float yCenter) = 0;
 };
 
 

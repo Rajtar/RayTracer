@@ -8,6 +8,7 @@
 
 class Scene {
 public:
+    /// Scene stack. Last appended primitive is rendered as first.
     std::list<std::unique_ptr<Primitive>> primitives;
 
     Scene() = default;
