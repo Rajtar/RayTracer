@@ -3,6 +3,7 @@
 
 
 #include <ostream>
+#include "geometry/Vector3.h"
 
 class LightIntensity {
 public:

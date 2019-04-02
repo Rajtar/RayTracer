@@ -7,8 +7,8 @@
 #include "camera/PerspectiveCamera.h"
 
 int main() {
-    const unsigned int width = 500,
-                       height = 500;
+    const unsigned int width = 750,
+                       height = 750;
 
     Sphere sphere(Vector3(0, 0, 10), 2);
     Scene scene;

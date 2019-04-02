@@ -10,8 +10,9 @@ class Camera {
 public:
     Vector3 position,
             direction,
-            viewportDistance,
             up;
+
+    float viewportDistance;
 
     Camera(Vector3 position, Vector3 direction, float viewportDistance, Vector3 up = Vector3());
     Camera() = default;

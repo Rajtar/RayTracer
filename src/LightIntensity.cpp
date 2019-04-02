@@ -1,8 +1,12 @@
 #include "LightIntensity.h"
 
-LightIntensity::LightIntensity(float r, float g, float b) : r(r), g(g), b(b) {}
+LightIntensity::LightIntensity(float r, float g, float b) : r(std::max(0.0F, std::min(r, 1.0F))),
+                                                            g(std::max(0.0F, std::min(g, 1.0F))),
+                                                            b(std::max(0.0F, std::min(b, 1.0F))) {}
 
-LightIntensity::LightIntensity(float rgb) : r(rgb), g(rgb), b(rgb) {}
+LightIntensity::LightIntensity(float rgb) : r(std::max(0.0F, std::min(rgb, 1.0F))),
+                                            g(std::max(0.0F, std::min(rgb, 1.0F))),
+                                            b(std::max(0.0F, std::min(rgb, 1.0F))) {}
 
 //region InstanceOperators
 
