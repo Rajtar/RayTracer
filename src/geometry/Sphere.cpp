@@ -29,9 +29,11 @@ bool Sphere::intersect(const Ray &ray, std::vector<Vector3> &intersections) {
     if (delta == 0) {
         float f = (-b / (2.0 * a));
 
-        intersections.push_back(f * rayDirection + ray.origin);
+        if(f > 0) {
+            intersections.push_back(f * rayDirection + ray.origin);
+        }
 
-        return true;
+        return !intersections.empty();
     }
     if (delta < 0) {
         return false;
