@@ -60,11 +60,14 @@ void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage
 
                 std::vector<Vector3> intersections;
                 int i = 0;
+                Vector3 previousColor;
                 for (const auto &primitive : scene.primitives) {
                     Vector3 lightIntensity(0, 0, 0);
                     for (const auto &ray : rays) {
                         if (primitive->intersect(ray, intersections)) {
                             lightIntensity += Vector3((float) x / imageWidth, (float) i / scene.primitives.size() , (float) y / imageHeight);
+                        } else {
+                            lightIntensity += previousColor;
                         }
                     }
 
@@ -72,6 +75,7 @@ void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage
                     if(lightIntensity.x != 0 || lightIntensity.y != 0 || lightIntensity.z != 0) {
                         targetImage->writePixel(x, y, LightIntensity(lightIntensity.x, lightIntensity.y, lightIntensity.z));
                     }
+                    previousColor = Vector3(lightIntensity.x, lightIntensity.y, lightIntensity.z);
                     i++;
                 }
             }
