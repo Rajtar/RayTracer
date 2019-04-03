@@ -15,9 +15,9 @@ int main() {
     const unsigned int width = 1000,
                        height = 1000;
 
-    Sphere s1(Vector3(0, 0, 5), 0.5);
-    Sphere s2(Vector3(0.75, 0.5, 5), 0.75);
-    Sphere s3(Vector3(-1, -1, 5), 3);
+    Sphere s1(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0));
+    Sphere s2(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0));
+    Sphere s3(Vector3(-1, -1, 7), 3, LightIntensity(0, 0, 1));
     Scene scene;
     scene.AddPrimitive(std::unique_ptr<Primitive>(&s3));
     scene.AddPrimitive(std::unique_ptr<Primitive>(&s1));

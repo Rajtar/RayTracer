@@ -2,7 +2,7 @@
 #include <memory>
 #include "Sphere.h"
 
-Sphere::Sphere(Vector3 center, float radius) : center(center), radius(radius) {}
+Sphere::Sphere(Vector3 center, float radius, LightIntensity color) : Primitive(color), center(center), radius(radius) {}
 
 bool Sphere::intersect(const Ray &ray, std::vector<Vector3> &intersections) {
     Vector3 rayDirection(ray.direction.normalize());
@@ -40,3 +40,5 @@ bool Sphere::intersect(const Ray &ray, std::vector<Vector3> &intersections) {
     }
     return false;
 }
+
+

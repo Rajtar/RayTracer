@@ -1,7 +1,9 @@
+#include <limits>
+#include <cmath>
 #include "Camera.h"
 #include "../static/Settings.hpp"
 
-Camera::Camera(Vector3 position, Vector3 direction, float viewportDistance, Vector3 up) : position(position),
+Camera::Camera(Vector3 position, Vector3 direction, double viewportDistance, Vector3 up) : position(position),
                                                                                           direction(direction),
                                                                                           viewportDistance(viewportDistance),
                                                                                           up(up) {}
@@ -10,24 +12,34 @@ void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage
     unsigned int imageWidth = targetImage->getWidth();
     unsigned int imageHeight = targetImage->getHeight();
 
-    float pixelHeight = 2.0F / imageWidth;
-    float pixelWidth = 2.0F / imageHeight;
+    double pixelHeight = 2.0F / imageWidth;
+    double pixelWidth = 2.0F / imageHeight;
 
     if(Settings::AntialiasingType == None) {
         for (unsigned int x = 0; x < imageWidth; x++) {
             for (unsigned int y = 0; y < imageHeight; y++) {
-                float xCenter = -1.0F + (x + 0.5F) * pixelWidth;
-                float yCenter = 1.0F - (y + 0.5F) * pixelHeight;
+                double xCenter = -1.0F + (x + 0.5F) * pixelWidth;
+                double yCenter = 1.0F - (y + 0.5F) * pixelHeight;
+                double lowestPixelDepth = std::numeric_limits<double>::max();
 
+                LightIntensity pixelColor(0, 0, 0);
                 Ray ray = getRay(xCenter, yCenter);
-
                 std::vector<Vector3> intersections;
-                int i = 0;
+
+                bool intersected = false;
                 for (const auto &primitive : scene.primitives) {
                     if (primitive->intersect(ray, intersections)) {
-                        targetImage->writePixel(x, y, LightIntensity((float) x / imageWidth, (float) i / scene.primitives.size(), (float) y / imageHeight));
+                        intersected = true;
+                        double intersectionDepth = (position - intersections.at(0)).getMagnitude();
+                        if(intersectionDepth < lowestPixelDepth) {
+                            lowestPixelDepth = intersectionDepth;
+                            pixelColor = primitive->color;
+                        }
                     }
-                    i++;
+                    intersections.clear();
+                }
+                if (intersected) {
+                    targetImage->writePixel(x, y, pixelColor);
                 }
             }
         }

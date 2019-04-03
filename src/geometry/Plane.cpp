@@ -1,7 +1,7 @@
 
 #include "Plane.h"
 
-Plane::Plane(const Vector3& point, const Vector3& normal) : point(point) {
+Plane::Plane(const Vector3 &point, const Vector3 &normal, LightIntensity color) : Primitive(color), point(point) {
     this->normal = normal.normalize();
 }
 

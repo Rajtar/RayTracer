@@ -7,22 +7,22 @@ Vector3::Vector3(const Vector3 &p1, const Vector3 &p2) {
     this->z = p2.z - p1.z;
 }
 
-Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
+Vector3::Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
 
-Vector3::Vector3(float xyz) : x(xyz), y(xyz), z(xyz) {}
+Vector3::Vector3(double xyz) : x(xyz), y(xyz), z(xyz) {}
 
 Vector3 Vector3::normalize() const {
-    float magnitude = getMagnitude();
+    double magnitude = getMagnitude();
     if (magnitude != 0) {
         return (*this / magnitude);
     }
 }
 
-float Vector3::getMagnitude() const {
+double Vector3::getMagnitude() const {
     return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 }
 
-float Vector3::dot(const Vector3 &other) const {
+double Vector3::dot(const Vector3 &other) const {
     return this->x * other.x + this->y * other.y + this->z * other.z;
 }
 

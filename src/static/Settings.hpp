@@ -8,7 +8,7 @@ enum AntialiasingTypes {
 
 class Settings {
 public:
-    static const AntialiasingTypes AntialiasingType = None;
+    static const AntialiasingTypes AntialiasingType = MultiSampling;
 };
 
 #endif //RENDERER_SETTINGS_HPP
