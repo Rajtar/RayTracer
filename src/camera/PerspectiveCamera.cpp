@@ -4,6 +4,6 @@ PerspectiveCamera::PerspectiveCamera(Vector3 position, Vector3 direction, float 
         position, direction, viewportDistance, up) {}
 
 Ray PerspectiveCamera::getRay(float xCenter, float yCenter) {
-    return Ray(this->position, Vector3(xCenter, yCenter, viewportDistance));
+    return Ray(this->position, getLowerLeftCorner() + xCenter * getHorizontal() + yCenter * getVertical()- position);
 }
 

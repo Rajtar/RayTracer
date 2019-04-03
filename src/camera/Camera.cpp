@@ -4,18 +4,26 @@
 Camera::Camera(Vector3 position, Vector3 direction, float viewportDistance, Vector3 up) : position(position),
                                                                                           direction(direction),
                                                                                           viewportDistance(viewportDistance),
-                                                                                          up(up) {}
+                                                                                          up(up) {
+    w = (position - direction).normalize();
+    u = up.cross(w).normalize();
+    v = w.cross(u);
+}
 
 void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage) {
     unsigned int imageWidth = targetImage->getWidth();
     unsigned int imageHeight = targetImage->getHeight();
+
+    lowerLeftCorner = position - imageWidth / 2.0 * viewportDistance * u - imageHeight / 2.0 * viewportDistance * v - viewportDistance * w;
+    horizontal = imageWidth * viewportDistance * u;
+    vertical = imageHeight * viewportDistance * v;
 
     float pixelHeight = 2.0F / imageWidth;
     float pixelWidth = 2.0F / imageHeight;
 
     if(Settings::AntialiasingType == None) {
         for (unsigned int x = 0; x < imageWidth; x++) {
-            for (unsigned int y = 0; y < imageHeight; y++) {
+            for (unsigned int y = imageHeight - 1; y > 0 ; y--) {
                 float xCenter = -1.0F + (x + 0.5F) * pixelWidth;
                 float yCenter = 1.0F - (y + 0.5F) * pixelHeight;
 
@@ -81,4 +89,28 @@ void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage
             }
         }
     }
+}
+
+const Vector3 &Camera::getLowerLeftCorner() const {
+    return lowerLeftCorner;
+}
+
+void Camera::setLowerLeftCorner(const Vector3 &lowerLeftCorner) {
+    Camera::lowerLeftCorner = lowerLeftCorner;
+}
+
+const Vector3 &Camera::getHorizontal() const {
+    return horizontal;
+}
+
+void Camera::setHorizontal(const Vector3 &horizontal) {
+    Camera::horizontal = horizontal;
+}
+
+const Vector3 &Camera::getVertical() const {
+    return vertical;
+}
+
+void Camera::setVertical(const Vector3 &vertical) {
+    Camera::vertical = vertical;
 }

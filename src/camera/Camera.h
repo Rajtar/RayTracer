@@ -19,6 +19,24 @@ public:
 
     virtual void renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage);
     virtual Ray getRay(float xCenter, float yCenter) = 0;
+
+    const Vector3 &getLowerLeftCorner() const;
+
+    void setLowerLeftCorner(const Vector3 &lowerLeftCorner);
+
+    const Vector3 &getHorizontal() const;
+
+    void setHorizontal(const Vector3 &horizontal);
+
+    const Vector3 &getVertical() const;
+
+    void setVertical(const Vector3 &vertical);
+
+private:
+    Vector3 u, v, w;
+    Vector3 lowerLeftCorner;
+    Vector3 horizontal;
+    Vector3 vertical;
 };
 
 

@@ -14,16 +14,16 @@ int main() {
     const unsigned int width = 300,
                        height = 300;
 
-    Sphere s1(Vector3(0, 0, 5), 0.5);
+    Sphere s1(Vector3(0, 0, 5), 0.03);
     Sphere s2(Vector3(0.75, 0.5, 5), 0.75);
     Sphere s3(Vector3(-1, -1, 5), 3);
     Scene scene;
-    scene.AddPrimitive(std::unique_ptr<Primitive>(&s3));
+//    scene.AddPrimitive(std::unique_ptr<Primitive>(&s3));
     scene.AddPrimitive(std::unique_ptr<Primitive>(&s1));
-    scene.AddPrimitive(std::unique_ptr<Primitive>(&s2));
+//    scene.AddPrimitive(std::unique_ptr<Primitive>(&s2));
 
 
-    OrthographicCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);
+    PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 3), 3);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
 
     auto startTime = std::chrono::system_clock::now();
