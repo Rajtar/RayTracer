@@ -9,10 +9,11 @@
 #include <chrono>
 
 const std::string currentDateTime();
+void drawGrid(Image &image, int density, char color);
 
 int main() {
-    const unsigned int width = 300,
-                       height = 300;
+    const unsigned int width = 1000,
+                       height = 1000;
 
     Sphere s1(Vector3(0, 0, 5), 0.5);
     Sphere s2(Vector3(0.75, 0.5, 5), 0.75);
@@ -23,8 +24,10 @@ int main() {
     scene.AddPrimitive(std::unique_ptr<Primitive>(&s2));
 
 
-    OrthographicCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);
+    PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
+
+    drawGrid(*image, 25, 50);
 
     auto startTime = std::chrono::system_clock::now();
     camera.renderScene(scene, image);
@@ -45,5 +48,15 @@ const std::string currentDateTime() {
     timeStruct = *localtime(&now);
     strftime(buf, sizeof(buf), "%Y-%m-%d--%H-%M-%S", &timeStruct);
     return buf;
+}
+
+void drawGrid(Image &image, int density, char color) {
+    for (unsigned int x = 0; x < image.getWidth(); x++) {
+        for (unsigned int y = 0; y < image.getHeight(); y++) {
+            if(x % density == 0 || y % density == 0) {
+                image.writePixel(x, y, color, color, color);
+            }
+        }
+    }
 }
 
