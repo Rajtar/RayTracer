@@ -19,6 +19,10 @@ public:
 
     virtual void renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage);
     virtual Ray getRay(double xCenter, double yCenter) = 0;
+
+private:
+    virtual void renderSceneNoneAntialiasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
+    virtual void renderSceneMultisapmleAntialiasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
 };
 
 
