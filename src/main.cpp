@@ -12,8 +12,8 @@ const std::string currentDateTime();
 void drawGrid(Image &image, int density, char color);
 
 int main() {
-    const unsigned int width = 1000,
-                       height = 1000;
+    const unsigned int width = 500,
+                       height = 500;
 
     Sphere s1(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0));
     Sphere s2(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0));

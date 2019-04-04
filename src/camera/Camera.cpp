@@ -62,6 +62,7 @@ void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage
                 float xLowerRight = -1.0F + (x + 1) * pixelWidth;
                 float yLowerRight = 1.0F - (y + 1) * pixelHeight;
 
+
                 Ray rays[] {
                         getRay(xCenter, yCenter),
                         getRay(xUpperLeft, yUpperLeft),
@@ -70,25 +71,29 @@ void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage
                         getRay(xLowerRight, yLowerRight),
                 };
 
+                bool intersected = false;
                 std::vector<Vector3> intersections;
-                int i = 0;
-                Vector3 previousColor;
-                for (const auto &primitive : scene.primitives) {
-                    Vector3 lightIntensity(0, 0, 0);
-                    for (const auto &ray : rays) {
+                Vector3 pixelColor;
+                for (const auto &ray : rays) {
+                    double lowestPixelDepth = std::numeric_limits<double>::max();
+                    Vector3 colorToAdd;
+                    for (const auto &primitive : scene.primitives) {
                         if (primitive->intersect(ray, intersections)) {
-                            lightIntensity += Vector3((float) x / imageWidth, (float) i / scene.primitives.size() , (float) y / imageHeight);
-                        } else {
-                            lightIntensity += previousColor;
+                            intersected = true;
+                            double intersectionDepth = (position - intersections.at(0)).getMagnitude();
+                            if (intersectionDepth < lowestPixelDepth) {
+                                lowestPixelDepth = intersectionDepth;
+                                colorToAdd = Vector3(primitive->color.r, primitive->color.g, primitive->color.b);
+                            }
                         }
+                        intersections.clear();
                     }
 
-                    lightIntensity /= 5;
-                    if(lightIntensity.x != 0 || lightIntensity.y != 0 || lightIntensity.z != 0) {
-                        targetImage->writePixel(x, y, LightIntensity(lightIntensity.x, lightIntensity.y, lightIntensity.z));
-                    }
-                    previousColor = Vector3(lightIntensity.x, lightIntensity.y, lightIntensity.z);
-                    i++;
+                    pixelColor += colorToAdd;
+                }
+                if(intersected) {
+                    pixelColor /= 5;
+                    targetImage->writePixel(x, y, LightIntensity(pixelColor.x, pixelColor.y, pixelColor.z));
                 }
             }
         }
