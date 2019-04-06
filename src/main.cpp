@@ -5,7 +5,6 @@
 #include "image/BitmapImage.h"
 #include "Scene.h"
 #include "camera/PerspectiveCamera.h"
-#include "camera/OrthographicCamera.h"
 #include <chrono>
 
 const std::string currentDateTime();
@@ -19,9 +18,9 @@ int main() {
     Sphere s2(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0));
     Sphere s3(Vector3(-1, -1, 7), 3, LightIntensity(0, 0, 1));
     Scene scene;
-    scene.AddPrimitive(std::unique_ptr<Primitive>(&s3));
-    scene.AddPrimitive(std::unique_ptr<Primitive>(&s1));
-    scene.AddPrimitive(std::unique_ptr<Primitive>(&s2));
+    scene.addPrimitive(std::unique_ptr<Primitive>(&s3));
+    scene.addPrimitive(std::unique_ptr<Primitive>(&s1));
+    scene.addPrimitive(std::unique_ptr<Primitive>(&s2));
 
 
     PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);

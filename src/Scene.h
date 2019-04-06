@@ -13,7 +13,7 @@ public:
 
     Scene() = default;
 
-    void AddPrimitive(std::unique_ptr<Primitive> primitive);
+    void addPrimitive(std::unique_ptr<Primitive> primitive);
 };
 
 

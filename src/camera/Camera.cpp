@@ -9,7 +9,6 @@ Camera::Camera(Vector3 position, Vector3 direction, double viewportDistance, Vec
                                                                                           up(up) {}
 
 void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage) {
-
     if(Settings::AntialiasingType == None) {
         renderSceneNoneAntialiasing(scene, targetImage);
     }
@@ -63,20 +62,20 @@ void Camera::renderSceneMultisapmleAntialiasing(const Scene &scene, std::unique_
 
     for (unsigned int x = 0; x < imageWidth; x++) {
         for (unsigned int y = 0; y < imageHeight; y++) {
-            float xUpperLeft = -1.0F + x * pixelWidth;
-            float yUpperLeft = 1.0F - y * pixelHeight;
+            double xUpperLeft = -1.0F + x * pixelWidth;
+            double yUpperLeft = 1.0F - y * pixelHeight;
 
-            float xLowerLeft = -1.0F + x * pixelWidth;
-            float yLowerLeft = 1.0F - (y + 1) * pixelHeight;
+            double xLowerLeft = -1.0F + x * pixelWidth;
+            double yLowerLeft = 1.0F - (y + 1) * pixelHeight;
 
-            float xCenter = -1.0F + (x + 0.5F) * pixelWidth;
-            float yCenter = 1.0F - (y + 0.5F) * pixelHeight;
+            double xCenter = -1.0F + (x + 0.5F) * pixelWidth;
+            double yCenter = 1.0F - (y + 0.5F) * pixelHeight;
 
-            float xUpperRight = -1.0F + (x + 1) * pixelWidth;
-            float yUpperRight = 1.0F - y * pixelHeight;
+            double xUpperRight = -1.0F + (x + 1) * pixelWidth;
+            double yUpperRight = 1.0F - y * pixelHeight;
 
-            float xLowerRight = -1.0F + (x + 1) * pixelWidth;
-            float yLowerRight = 1.0F - (y + 1) * pixelHeight;
+            double xLowerRight = -1.0F + (x + 1) * pixelWidth;
+            double yLowerRight = 1.0F - (y + 1) * pixelHeight;
 
 
             Ray rays[] {
