@@ -5,23 +5,27 @@
 #include "image/BitmapImage.h"
 #include "Scene.h"
 #include "camera/PerspectiveCamera.h"
+#include "geometry/Triangle.h"
+#include "geometry/Plane.h"
 #include <chrono>
 
 const std::string currentDateTime();
-void drawGrid(Image &image, int density, char color);
+void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
     const unsigned int width = 500,
                        height = 500;
 
-    Sphere s1(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0));
-    Sphere s2(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0));
-    Sphere s3(Vector3(-1, -1, 7), 3, LightIntensity(0, 0, 1));
+    std::shared_ptr<Sphere> s1(new Sphere(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0)));
+    std::shared_ptr<Sphere> s2(new Sphere(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0)));
+    std::shared_ptr<Sphere> s3(new Sphere(Vector3(-1, -1, 7), 3, LightIntensity(0, 0, 1)));
+    std::shared_ptr<Triangle> t(new Triangle(Vector3(-1, 0, 3), Vector3(1, 0, 3), Vector3(0, 1, 3), LightIntensity(0.3, 0.6, 0.9)));
     Scene scene;
-    scene.addPrimitive(std::unique_ptr<Primitive>(&s3));
-    scene.addPrimitive(std::unique_ptr<Primitive>(&s1));
-    scene.addPrimitive(std::unique_ptr<Primitive>(&s2));
 
+    scene.addPrimitive(s1);
+    scene.addPrimitive(s2);
+    scene.addPrimitive(s3);
+    scene.addPrimitive(t);
 
     PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
@@ -49,7 +53,7 @@ const std::string currentDateTime() {
     return buf;
 }
 
-void drawGrid(Image &image, int density, char color) {
+void drawGrid(Image &image, int density, unsigned char color) {
     for (unsigned int x = 0; x < image.getWidth(); x++) {
         for (unsigned int y = 0; y < image.getHeight(); y++) {
             if(x % density == 0 || y % density == 0) {

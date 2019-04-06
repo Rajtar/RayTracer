@@ -9,11 +9,11 @@
 class Scene {
 public:
     /// Scene stack. Last appended primitive is rendered as first.
-    std::list<std::unique_ptr<Primitive>> primitives;
+    std::list<std::shared_ptr<Primitive>> primitives;
 
     Scene() = default;
 
-    void addPrimitive(std::unique_ptr<Primitive> primitive);
+    void addPrimitive(std::shared_ptr<Primitive> primitive);
 };
 
 

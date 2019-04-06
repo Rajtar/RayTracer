@@ -7,10 +7,12 @@
 
 class LightIntensity {
 public:
-    float r, g, b;
+    float r = 0,
+          g = 0,
+          b = 0;
 
     LightIntensity(float r, float g, float b);
-    LightIntensity(float rgb);
+    explicit LightIntensity(float rgb);
     LightIntensity() = default;
 
     void operator+=(const LightIntensity &other);

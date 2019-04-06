@@ -38,7 +38,7 @@ void Camera::renderSceneNoneAntialiasing(const Scene &scene, std::unique_ptr<Ima
             for (const auto &primitive : scene.primitives) {
                 if (primitive->intersect(ray, intersections)) {
                     intersected = true;
-                    double intersectionDepth = (position - intersections.at(0)).getMagnitude();
+                    double intersectionDepth = (position - intersections.front()).getMagnitude();
                     if(intersectionDepth < lowestPixelDepth) {
                         lowestPixelDepth = intersectionDepth;
                         pixelColor = primitive->color;
@@ -95,7 +95,7 @@ void Camera::renderSceneMultisapmleAntialiasing(const Scene &scene, std::unique_
                 for (const auto &primitive : scene.primitives) {
                     if (primitive->intersect(ray, intersections)) {
                         intersected = true;
-                        double intersectionDepth = (position - intersections.at(0)).getMagnitude();
+                        double intersectionDepth = (position - intersections.front()).getMagnitude();
                         if (intersectionDepth < lowestPixelDepth) {
                             lowestPixelDepth = intersectionDepth;
                             colorToAdd = Vector3(primitive->color.r, primitive->color.g, primitive->color.b);
