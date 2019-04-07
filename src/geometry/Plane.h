@@ -14,7 +14,7 @@ public:
 
     Plane(const Vector3 &point, const Vector3 &normal, LightIntensity color);
 
-    bool intersect(const Ray &ray, std::vector<Vector3> &intersections) override;
+    bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const override;
 };
 
 

@@ -4,7 +4,7 @@
 #include <memory>
 #include "../geometry/Vector3.h"
 #include "../Scene.h"
-#include "../image/Image.h"
+#include "../io/image/Image.h"
 
 class Camera {
 public:

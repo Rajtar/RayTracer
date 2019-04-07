@@ -3,7 +3,7 @@
 
 
 #include <string>
-#include "../LightIntensity.h"
+#include "../../LightIntensity.h"
 
 class Image {
 private:

@@ -12,7 +12,7 @@ public:
 
     Primitive(LightIntensity color) : color(color) {}
 
-    virtual bool intersect(const Ray &ray, std::vector<Vector3> &intersections) = 0;
+    virtual bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const = 0;
 };
 
 

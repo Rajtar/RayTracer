@@ -5,7 +5,7 @@ Plane::Plane(const Vector3 &point, const Vector3 &normal, LightIntensity color) 
     this->normal = normal.normalize();
 }
 
-bool Plane::intersect(const Ray &ray, std::vector<Vector3> &intersections) {
+bool Plane::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
     double denominator = this->normal.dot(ray.direction);
     if(denominator > 0) {
         Vector3 distance = this->point - ray.origin;

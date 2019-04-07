@@ -11,7 +11,7 @@ public:
 
     Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, LightIntensity color);
 
-    bool intersect(const Ray &ray, std::vector<Vector3> &intersections) override;
+    bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const override;
 };
 
 

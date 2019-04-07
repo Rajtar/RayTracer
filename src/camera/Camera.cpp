@@ -1,7 +1,10 @@
 #include <limits>
 #include <cmath>
+#include <iostream>
 #include "Camera.h"
 #include "../static/Settings.hpp"
+
+#define PROGRESS_LOG  true
 
 Camera::Camera(Vector3 position, Vector3 direction, double viewportDistance, Vector3 up) : position(position),
                                                                                           direction(direction),
@@ -25,6 +28,14 @@ void Camera::renderSceneNoneAntialiasing(const Scene &scene, std::unique_ptr<Ima
     double pixelWidth = 2.0F / imageHeight;
 
     for (unsigned int x = 0; x < imageWidth; x++) {
+
+        #if PROGRESS_LOG
+            float progress = ((float) x / (float) imageWidth) * 100;
+            if(fmodf(progress, 10) == 0) {
+                std::cout<< " - " << progress << "%" << std::endl;
+            }
+        #endif
+
         for (unsigned int y = 0; y < imageHeight; y++) {
             double xCenter = -1.0F + (x + 0.5F) * pixelWidth;
             double yCenter = 1.0F - (y + 0.5F) * pixelHeight;
@@ -51,6 +62,9 @@ void Camera::renderSceneNoneAntialiasing(const Scene &scene, std::unique_ptr<Ima
             }
         }
     }
+    #if PROGRESS_LOG
+        std::cout<< " - " << 100 << "%" << std::endl;
+    #endif
 }
 
 void Camera::renderSceneMultisapmleAntialiasing(const Scene &scene, std::unique_ptr<Image> &targetImage) {

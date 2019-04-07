@@ -2,7 +2,7 @@
 #define RENDERER_BITMAPIMAGE_H
 
 #include "bitmap_image.hpp"
-#include "../LightIntensity.h"
+#include "../../LightIntensity.h"
 #include "Image.h"
 
 class BitmapImage : public Image {

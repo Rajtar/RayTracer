@@ -13,7 +13,7 @@ public:
 
     Sphere(Vector3 center, float radius, LightIntensity color);
 
-    bool intersect(const Ray &ray, std::vector<Vector3> &intersections) override;
+    bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const override;
 };
 
 

@@ -1,37 +1,44 @@
 #include <iostream>
 #include <memory>
 #include "geometry/Sphere.h"
-#include "image/bitmap_image.hpp"
-#include "image/BitmapImage.h"
 #include "Scene.h"
 #include "camera/PerspectiveCamera.h"
 #include "geometry/Triangle.h"
-#include "geometry/Plane.h"
+#include "io/image/BitmapImage.h"
+#include "io/mesh/OBJLoader.h"
+#include "static/StringUtils.h"
 #include <chrono>
 
 const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 500,
-                       height = 500;
+    const unsigned int width = 100,
+                       height = 100;
 
-    std::shared_ptr<Sphere> s1(new Sphere(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0)));
-    std::shared_ptr<Sphere> s2(new Sphere(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0)));
-    std::shared_ptr<Sphere> s3(new Sphere(Vector3(-1, -1, 7), 3, LightIntensity(0, 0, 1)));
-    std::shared_ptr<Triangle> t(new Triangle(Vector3(-1, 0, 3), Vector3(1, 0, 3), Vector3(0, 1, 3), LightIntensity(0.3, 0.6, 0.9)));
+    OBJLoader loader;
+    std::shared_ptr<Mesh> cube(new Mesh(LightIntensity(1, 0, 0)));
+    loader.loadMesh("../models/cube.obj", cube);
+
     Scene scene;
+    scene.addPrimitive(cube);
 
-    scene.addPrimitive(s1);
-    scene.addPrimitive(s2);
-    scene.addPrimitive(s3);
-    scene.addPrimitive(t);
+//    std::shared_ptr<Sphere> s1(new Sphere(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0)));
+//    std::shared_ptr<Sphere> s2(new Sphere(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0)));
+//    std::shared_ptr<Sphere> s3(new Sphere(Vector3(-1, -1, 7), 3, LightIntensity(0, 0, 1)));
+//    std::shared_ptr<Triangle> t(new Triangle(Vector3(-1, 0, 3), Vector3(1, 0, 3), Vector3(0, 1, 3), LightIntensity(0.3, 0.6, 0.9)));
+//
+//    scene.addPrimitive(s1);
+//    scene.addPrimitive(s2);
+//    scene.addPrimitive(s3);
+//    scene.addPrimitive(t);
 
     PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
 
     drawGrid(*image, 25, 50);
 
+    std::cout << "Rendering scene with: " << scene.primitives.size() << (scene.primitives.size() == 1 ? " object\n" : " objects\n") ;
     auto startTime = std::chrono::system_clock::now();
     camera.renderScene(scene, image);
     auto endTime = std::chrono::system_clock::now();
@@ -41,6 +48,7 @@ int main() {
 
     std::string fileName = currentDateTime() + ".bmp";
     image->saveToFile(fileName);
+
     return 0;
 }
 
