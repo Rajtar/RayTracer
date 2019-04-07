@@ -12,15 +12,15 @@ Camera::Camera(Vector3 position, Vector3 direction, double viewportDistance, Vec
                                                                                           up(up) {}
 
 void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage) {
-    if(Settings::AntialiasingType == None) {
-        renderSceneNoneAntialiasing(scene, targetImage);
+    if(Settings::AntiAliasingType == None) {
+        renderSceneNoneAntiAliasing(scene, targetImage);
     }
-    else if(Settings::AntialiasingType == MultiSampling) {
-        renderSceneMultisapmleAntialiasing(scene, targetImage);
+    else if(Settings::AntiAliasingType == MultiSampling) {
+        renderSceneMultisapmleAntiAliasing(scene, targetImage);
     }
 }
 
-void Camera::renderSceneNoneAntialiasing(const Scene &scene, std::unique_ptr<Image> &targetImage) {
+void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage) {
     unsigned int imageWidth = targetImage->getWidth();
     unsigned int imageHeight = targetImage->getHeight();
 
@@ -28,14 +28,9 @@ void Camera::renderSceneNoneAntialiasing(const Scene &scene, std::unique_ptr<Ima
     double pixelWidth = 2.0F / imageHeight;
 
     for (unsigned int x = 0; x < imageWidth; x++) {
-
         #if PROGRESS_LOG
-            float progress = ((float) x / (float) imageWidth) * 100;
-            if(fmodf(progress, 10) == 0) {
-                std::cout<< " - " << progress << "%" << std::endl;
-            }
+            printProgress((float) x, (float) imageWidth);
         #endif
-
         for (unsigned int y = 0; y < imageHeight; y++) {
             double xCenter = -1.0F + (x + 0.5F) * pixelWidth;
             double yCenter = 1.0F - (y + 0.5F) * pixelHeight;
@@ -67,7 +62,7 @@ void Camera::renderSceneNoneAntialiasing(const Scene &scene, std::unique_ptr<Ima
     #endif
 }
 
-void Camera::renderSceneMultisapmleAntialiasing(const Scene &scene, std::unique_ptr<Image> &targetImage) {
+void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage) {
     unsigned int imageWidth = targetImage->getWidth();
     unsigned int imageHeight = targetImage->getHeight();
 
@@ -75,6 +70,9 @@ void Camera::renderSceneMultisapmleAntialiasing(const Scene &scene, std::unique_
     double pixelWidth = 2.0F / imageHeight;
 
     for (unsigned int x = 0; x < imageWidth; x++) {
+        #if PROGRESS_LOG
+            printProgress((float) x, (float) imageWidth);
+        #endif
         for (unsigned int y = 0; y < imageHeight; y++) {
             double xUpperLeft = -1.0F + x * pixelWidth;
             double yUpperLeft = 1.0F - y * pixelHeight;
@@ -125,5 +123,13 @@ void Camera::renderSceneMultisapmleAntialiasing(const Scene &scene, std::unique_
                 targetImage->writePixel(x, y, LightIntensity(pixelColor.x, pixelColor.y, pixelColor.z));
             }
         }
+    }
+}
+
+void Camera::printProgress(float now, float total) {
+    float progress =  (now / total) * 100;
+    if(fmodf(progress, 10) == 0) {
+        std::cout << " - " << progress << "%\r";
+        std::cout.flush();
     }
 }

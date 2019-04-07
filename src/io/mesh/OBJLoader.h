@@ -11,14 +11,14 @@
 
 class OBJLoader : public MeshLoader {
 public:
-    void loadMesh(std::string filePath, std::shared_ptr<Mesh> targetMesh) override;
+    void loadMesh(const std::string &filePath, std::shared_ptr<Mesh> targetMesh, const Vector3 &positionOffset = Vector3()) override;
 
 private:
     std::vector<Vector3> vertices;
     std::vector<Vector3> normals;
     std::vector<Triangle> faces;
 
-    void parseVertex(std::vector<std::string> vertexLine);
+    void parseVertex(std::vector<std::string> vertexLine, Vector3 positionOffset);
     void parseNormal(std::vector<std::string> normalLine);
     void parseFace(std::vector<std::string> faceLine);
     void init();

@@ -7,21 +7,23 @@
 #include "io/image/BitmapImage.h"
 #include "io/mesh/OBJLoader.h"
 #include "static/StringUtils.h"
+#include "camera/OrthographicCamera.h"
 #include <chrono>
 
 const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 100,
-                       height = 100;
+    const unsigned int width = 50,
+                       height = 50;
 
     OBJLoader loader;
-    std::shared_ptr<Mesh> cube(new Mesh(LightIntensity(1, 0, 0)));
-    loader.loadMesh("../models/cube.obj", cube);
+    std::shared_ptr<Mesh> mesh(new Mesh(LightIntensity(0.33, 0.66, 0.99)));
+
+    loader.loadMesh("../models/teapot.obj", mesh, Vector3(0, 0, 10));
 
     Scene scene;
-    scene.addPrimitive(cube);
+    scene.addPrimitive(mesh);
 
 //    std::shared_ptr<Sphere> s1(new Sphere(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0)));
 //    std::shared_ptr<Sphere> s2(new Sphere(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0)));
@@ -49,6 +51,7 @@ int main() {
     std::string fileName = currentDateTime() + ".bmp";
     image->saveToFile(fileName);
 
+    std::cout<< "Saved image as: " << fileName << std::endl;
     return 0;
 }
 

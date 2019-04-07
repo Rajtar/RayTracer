@@ -12,7 +12,7 @@ public:
             direction,
             up;
 
-    float viewportDistance;
+    double viewportDistance;
 
     Camera(Vector3 position, Vector3 direction, double viewportDistance, Vector3 up = Vector3(0, 1, 0));
     Camera() = default;
@@ -21,8 +21,9 @@ public:
     virtual Ray getRay(double xCenter, double yCenter) = 0;
 
 private:
-    virtual void renderSceneNoneAntialiasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
-    virtual void renderSceneMultisapmleAntialiasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
+    virtual void renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
+    virtual void renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
+    void printProgress(float now, float total);
 };
 
 

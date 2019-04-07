@@ -10,7 +10,7 @@
 #include "OBJLoader.h"
 #include "../../static/StringUtils.h"
 
-void OBJLoader::loadMesh(std::string filePath, std::shared_ptr<Mesh> targetMesh) {
+void OBJLoader::loadMesh(const std::string &filePath, std::shared_ptr<Mesh> targetMesh, const Vector3 &positionOffset) {
     init();
     std::cout << "Parsing file: " << filePath << std::endl;
 
@@ -22,16 +22,16 @@ void OBJLoader::loadMesh(std::string filePath, std::shared_ptr<Mesh> targetMesh)
     std::string line;
     while (std::getline(inputFile, line))
     {
-        std::vector<std::string> splitedLine = StringUtils::split(line, ' ', true);
-        if (!splitedLine.empty() && !splitedLine.front().empty()) {
-            if(StringUtils::toLower(splitedLine.front()) == "v") {
-                std::vector<std::string> vertexLine(splitedLine.begin() + 1, splitedLine.end());
-                parseVertex(vertexLine);
-            } else if(StringUtils::toLower(splitedLine.front()) == "vn") {
-                std::vector<std::string> normalLine(splitedLine.begin() + 1, splitedLine.end());
+        std::vector<std::string> splitLine = StringUtils::split(line, ' ', true);
+        if (!splitLine.empty() && !splitLine.front().empty()) {
+            if(StringUtils::toLower(splitLine.front()) == "v") {
+                std::vector<std::string> vertexLine(splitLine.begin() + 1, splitLine.end());
+                parseVertex(vertexLine, positionOffset);
+            } else if(StringUtils::toLower(splitLine.front()) == "vn") {
+                std::vector<std::string> normalLine(splitLine.begin() + 1, splitLine.end());
                 parseNormal(normalLine);
-            } else if(StringUtils::toLower(splitedLine.front()) == "f") {
-                std::vector<std::string> faceLine(splitedLine.begin() + 1, splitedLine.end());
+            } else if(StringUtils::toLower(splitLine.front()) == "f") {
+                std::vector<std::string> faceLine(splitLine.begin() + 1, splitLine.end());
                 parseFace(faceLine);
             }
         }
@@ -44,8 +44,8 @@ void OBJLoader::loadMesh(std::string filePath, std::shared_ptr<Mesh> targetMesh)
     targetMesh->faces = this->faces;
 }
 
-void OBJLoader::parseVertex(std::vector<std::string> vertexLine) {
-    Vector3 vertex = Vector3(std::stod(vertexLine[0]), std::stod(vertexLine[1]), std::stod(vertexLine[2]) + 10);
+void OBJLoader::parseVertex(std::vector<std::string> vertexLine, Vector3 positionOffset) {
+    Vector3 vertex = Vector3(std::stod(vertexLine[0]) + positionOffset.x, std::stod(vertexLine[1]) + positionOffset.y, std::stod(vertexLine[2]) + positionOffset.z);
     this->vertices.push_back(vertex);
 }
 

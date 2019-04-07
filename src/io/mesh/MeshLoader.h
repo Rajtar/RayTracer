@@ -10,7 +10,8 @@
 
 class MeshLoader {
 public:
-    virtual void loadMesh(std::string filePath, std::shared_ptr<Mesh> targetMesh) = 0;
+    virtual void loadMesh(const std::string &filePath, std::shared_ptr<Mesh> targetMesh, const Vector3 &positionOffset = Vector3()) = 0;
+
 };
 
 
