@@ -10,6 +10,7 @@ public:
     Vector3 normal;
 
     Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, LightIntensity color);
+    Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, Material material);
 
     bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const override;
 };

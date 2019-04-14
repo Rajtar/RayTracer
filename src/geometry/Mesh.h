@@ -9,8 +9,6 @@ class Mesh : public Primitive {
 public:
     std::vector<Triangle> faces;
 
-    int dupsko;
-
     explicit Mesh(const LightIntensity &color);
 
     bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const override;

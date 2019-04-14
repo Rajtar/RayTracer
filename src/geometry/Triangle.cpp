@@ -10,8 +10,15 @@ Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, LightIn
     this->normal = (b - a).cross(c - a).normalize();
 }
 
+Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, Material material) : Primitive(material),
+                                                                                                a(a),
+                                                                                                b(b),
+                                                                                                c(c) {
+    this->normal = (b - a).cross(c - a).normalize();
+}
+
 bool Triangle::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
-    Plane plane(a, normal, color);
+    Plane plane(a, normal, this->getDiffuse());
     std::vector<Vector3> planeIntersections;
     if(!plane.intersect(ray, planeIntersections)) {
         return false;

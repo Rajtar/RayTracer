@@ -5,6 +5,10 @@ Plane::Plane(const Vector3 &point, const Vector3 &normal, LightIntensity color) 
     this->normal = normal.normalize();
 }
 
+Plane::Plane(const Vector3 &point, const Vector3 &normal, Material material) : Primitive(material), point(point) {
+    this->normal = normal.normalize();
+}
+
 bool Plane::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
     double denominator = this->normal.dot(ray.direction);
     if(denominator > 0) {

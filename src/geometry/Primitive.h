@@ -5,14 +5,32 @@
 #include "Vector3.h"
 #include "Ray.h"
 #include "../LightIntensity.h"
+#include "../Material.h"
 
 class Primitive {
 public:
-    LightIntensity color;
 
-    Primitive(LightIntensity color) : color(color) {}
+    Primitive(LightIntensity color) {
+        material = Material(color, color, color, color);
+    }
+    Primitive(Material material) : material(material) {}
 
     virtual bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const = 0;
+
+    LightIntensity getDiffuse() const {
+        return material.diffuse;
+    }
+
+    LightIntensity getAmbient() const {
+        return material.ambient;
+    }
+
+    LightIntensity getSpecular() const {
+        return material.specular;
+    }
+
+private:
+    Material material;
 };
 
 

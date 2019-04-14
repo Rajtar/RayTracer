@@ -4,6 +4,8 @@
 
 Sphere::Sphere(Vector3 center, float radius, LightIntensity color) : Primitive(color), center(center), radius(radius) {}
 
+Sphere::Sphere(Vector3 center, float radius, Material material) : Primitive(material), center(center), radius(radius) {}
+
 bool Sphere::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
     Vector3 rayDirection(ray.direction.normalize());
 

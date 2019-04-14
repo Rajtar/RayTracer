@@ -8,6 +8,7 @@
 #include "io/mesh/OBJLoader.h"
 #include "static/StringUtils.h"
 #include "camera/OrthographicCamera.h"
+#include "geometry/Plane.h"
 #include <chrono>
 
 const std::string currentDateTime();
@@ -19,11 +20,13 @@ int main() {
 
     OBJLoader loader;
     std::shared_ptr<Mesh> mesh(new Mesh(LightIntensity(0.33, 0.66, 0.99)));
+    std::shared_ptr<Plane> floor(new Plane(Vector3(0, 0, 0), Vector3(0, 1, 0), LightIntensity(0, 1, 0)));
 
     loader.loadMesh("../models/teapot.obj", mesh, Vector3(0, 0, 10));
 
     Scene scene;
     scene.addPrimitive(mesh);
+    scene.addPrimitive(floor);
 
 //    std::shared_ptr<Sphere> s1(new Sphere(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0)));
 //    std::shared_ptr<Sphere> s2(new Sphere(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0)));

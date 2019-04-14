@@ -1,7 +1,3 @@
-//
-// Created by jakub on 06.04.2019.
-//
-
 #ifndef RENDERER_OBJLOADER_H
 #define RENDERER_OBJLOADER_H
 

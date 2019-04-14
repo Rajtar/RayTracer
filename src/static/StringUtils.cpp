@@ -1,7 +1,3 @@
-//
-// Created by jakub on 06.04.2019.
-//
-
 #include <sstream>
 #include <algorithm>
 #include "StringUtils.h"
