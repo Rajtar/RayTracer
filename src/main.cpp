@@ -15,18 +15,18 @@ const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 50,
-                       height = 50;
+    const unsigned int width = 200,
+                       height = 200;
 
     OBJLoader loader;
     std::shared_ptr<Mesh> mesh(new Mesh(LightIntensity(0.33, 0.66, 0.99)));
     std::shared_ptr<Plane> floor(new Plane(Vector3(0, 0, 0), Vector3(0, 1, 0), LightIntensity(0, 1, 0)));
 
-    loader.loadMesh("../models/teapot.obj", mesh, Vector3(0, 0, 10));
+    loader.loadMesh("../models/teapot.obj", mesh, Vector3(0, 0, 5));
 
     Scene scene;
     scene.addPrimitive(mesh);
-    scene.addPrimitive(floor);
+//    scene.addPrimitive(floor);
 
 //    std::shared_ptr<Sphere> s1(new Sphere(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0)));
 //    std::shared_ptr<Sphere> s2(new Sphere(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0)));

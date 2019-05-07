@@ -10,6 +10,7 @@
 class Primitive {
 public:
 
+    Primitive() = default;
     Primitive(LightIntensity color) {
         material = Material(color, color, color, color);
     }

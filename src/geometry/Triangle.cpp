@@ -10,6 +10,12 @@ Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, LightIn
     this->normal = (b - a).cross(c - a).normalize();
 }
 
+Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Vector3 &normal, LightIntensity color) :Primitive(color),
+                                                                                                                       a(a),
+                                                                                                                       b(b),
+                                                                                                                       c(c),
+                                                                                                                       normal(normal) {}
+
 Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, Material material) : Primitive(material),
                                                                                                 a(a),
                                                                                                 b(b),
