@@ -7,7 +7,7 @@ Sphere::Sphere(Vector3 center, float radius, LightIntensity color) : Primitive(c
 Sphere::Sphere(Vector3 center, float radius, Material material) : Primitive(material), center(center), radius(radius) {}
 
 bool Sphere::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
-    Vector3 rayDirection(ray.direction.normalize());
+    Vector3 rayDirection(ray.direction.normalized());
 
     Vector3 oc = ray.origin - center;
     double a = rayDirection.dot(rayDirection);
@@ -41,6 +41,10 @@ bool Sphere::intersect(const Ray &ray, std::vector<Vector3> &intersections) cons
         return false;
     }
     return false;
+}
+
+Vector3 Sphere::getNormalAt(Vector3 point) {
+    return (point - this->center).normalized();
 }
 
 

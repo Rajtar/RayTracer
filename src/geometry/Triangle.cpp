@@ -7,7 +7,7 @@ Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, LightIn
                                                                                                  a(a),
                                                                                                  b(b),
                                                                                                  c(c) {
-    this->normal = (b - a).cross(c - a).normalize();
+    this->normal = (b - a).cross(c - a).normalized();
 }
 
 Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Vector3 &normal, LightIntensity color) :Primitive(color),
@@ -20,7 +20,7 @@ Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, Materia
                                                                                                 a(a),
                                                                                                 b(b),
                                                                                                 c(c) {
-    this->normal = (b - a).cross(c - a).normalize();
+    this->normal = (b - a).cross(c - a).normalized();
 }
 
 bool Triangle::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
@@ -48,6 +48,10 @@ bool Triangle::intersect(const Ray &ray, std::vector<Vector3> &intersections) co
 
     intersections.push_back(intersection);
     return true;
+}
+
+Vector3 Triangle::getNormalAt(Vector3 point) {
+    return this->normal;
 }
 
 

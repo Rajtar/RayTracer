@@ -20,3 +20,7 @@ bool Mesh::intersect(const Ray &ray, std::vector<Vector3> &intersections) const 
 
     return false;
 }
+
+Vector3 Mesh::getNormalAt(Vector3 point) {
+    return Vector3(); // TODO
+}

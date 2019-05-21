@@ -9,14 +9,15 @@
 #include "static/StringUtils.h"
 #include "camera/OrthographicCamera.h"
 #include "geometry/Plane.h"
+#include "light/PointLight.h"
 #include <chrono>
 
 const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 200,
-                       height = 200;
+    const unsigned int width = 500,
+                       height = 500;
 
     OBJLoader loader;
     std::shared_ptr<Mesh> mesh(new Mesh(LightIntensity(0.33, 0.66, 0.99)));
@@ -25,18 +26,26 @@ int main() {
     loader.loadMesh("../models/teapot.obj", mesh, Vector3(0, 0, 5));
 
     Scene scene;
-    scene.addPrimitive(mesh);
+//    scene.addPrimitive(mesh);
 //    scene.addPrimitive(floor);
 
 //    std::shared_ptr<Sphere> s1(new Sphere(Vector3(0.5, 0, 5), 1, LightIntensity(1, 0, 0)));
 //    std::shared_ptr<Sphere> s2(new Sphere(Vector3(-0.5, 0, 5), 1, LightIntensity(0, 1, 0)));
-//    std::shared_ptr<Sphere> s3(new Sphere(Vector3(-1, -1, 7), 3, LightIntensity(0, 0, 1)));
+    std::shared_ptr<Sphere> s3(new Sphere(Vector3(-1, -1, 7), 3, LightIntensity(0, 0, 1)));
 //    std::shared_ptr<Triangle> t(new Triangle(Vector3(-1, 0, 3), Vector3(1, 0, 3), Vector3(0, 1, 3), LightIntensity(0.3, 0.6, 0.9)));
-//
+
+    Material basicMaterial(LightIntensity(0.25, 0.25, 0.25), LightIntensity(0.25, 0.25, 0.25), LightIntensity(0.25, 0.25, 0.25), 0.9);
+    Material blackMaterial(LightIntensity(0, 0, 0), LightIntensity(0, 0, 0), LightIntensity(0, 0, 0), 0.75);
+//    s1.get()->material = blackMaterial;
+    s3.get()->material = basicMaterial;
+
+    std::shared_ptr<PointLight> pointLight(new PointLight(LightIntensity(1, 0, 0), LightIntensity(1, 0, 0), LightIntensity(0.2, 0.2, 0.2), Vector3(0, 0, -5), 1, 1, 1));
+
 //    scene.addPrimitive(s1);
 //    scene.addPrimitive(s2);
-//    scene.addPrimitive(s3);
+    scene.addPrimitive(s3);
 //    scene.addPrimitive(t);
+    scene.addLight(pointLight);
 
     PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);
     std::unique_ptr<Image> image(new BitmapImage(width, height));

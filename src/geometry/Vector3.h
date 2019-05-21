@@ -16,7 +16,7 @@ public:
     Vector3(double xyz);
     Vector3() = default;
 
-    Vector3 normalize() const;
+    Vector3 normalized() const;
     double getMagnitude() const;
     double dot(const Vector3 &other) const;
     Vector3 cross(const Vector3 &other) const;

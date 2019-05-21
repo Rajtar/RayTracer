@@ -12,7 +12,7 @@ public:
           b = 0;
 
     LightIntensity(float r, float g, float b);
-    explicit LightIntensity(float rgb);
+    LightIntensity(float rgb);
     LightIntensity() = default;
 
     void operator+=(const LightIntensity &other);

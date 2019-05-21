@@ -2,11 +2,11 @@
 #include "Plane.h"
 
 Plane::Plane(const Vector3 &point, const Vector3 &normal, LightIntensity color) : Primitive(color), point(point) {
-    this->normal = normal.normalize();
+    this->normal = normal.normalized();
 }
 
 Plane::Plane(const Vector3 &point, const Vector3 &normal, Material material) : Primitive(material), point(point) {
-    this->normal = normal.normalize();
+    this->normal = normal.normalized();
 }
 
 bool Plane::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
@@ -22,4 +22,8 @@ bool Plane::intersect(const Ray &ray, std::vector<Vector3> &intersections) const
     }
 
     return false;
+}
+
+Vector3 Plane::getNormalAt(Vector3 point) {
+    return this->normal;
 }

@@ -47,7 +47,7 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
                     double intersectionDepth = (position - intersections.front()).getMagnitude();
                     if(intersectionDepth < lowestPixelDepth) {
                         lowestPixelDepth = intersectionDepth;
-                        pixelColor = primitive->getDiffuse();
+                        pixelColor = calculatePixelColor(scene, primitive, intersections.front());
                     }
                 }
                 intersections.clear();
@@ -110,7 +110,8 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
                         double intersectionDepth = (position - intersections.front()).getMagnitude();
                         if (intersectionDepth < lowestPixelDepth) {
                             lowestPixelDepth = intersectionDepth;
-                            colorToAdd = Vector3(primitive->getDiffuse().r, primitive->getDiffuse().g, primitive->getDiffuse().b);
+                            LightIntensity calculatedColor = calculatePixelColor(scene, primitive, intersections.front());
+                            colorToAdd = Vector3(calculatedColor.r, calculatedColor.g, calculatedColor.b);
                         }
                     }
                     intersections.clear();
@@ -123,6 +124,16 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
                 targetImage->writePixel(x, y, LightIntensity(pixelColor.x, pixelColor.y, pixelColor.z));
             }
         }
+    }
+}
+
+LightIntensity Camera::calculatePixelColor(Scene scene,
+                                           std::shared_ptr<Primitive> intersectedPrimitive,
+                                           Vector3 intersectionPoint) {
+    scene.primitives.remove(intersectedPrimitive);
+    for (const auto &light : scene.lights) {
+        return light.get()->calculateLightIntensity(scene.primitives, this->position, intersectedPrimitive,
+                                                    intersectionPoint);
     }
 }
 

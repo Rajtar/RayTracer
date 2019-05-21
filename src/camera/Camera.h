@@ -5,6 +5,7 @@
 #include "../geometry/Vector3.h"
 #include "../Scene.h"
 #include "../io/image/Image.h"
+#include "../light/Light.h"
 
 class Camera {
 public:
@@ -23,6 +24,9 @@ public:
 private:
     virtual void renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
     virtual void renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
+    LightIntensity calculatePixelColor(Scene scene,
+                                       std::shared_ptr<Primitive> intersectedPrimitive,
+                                       Vector3 intersectionPoint);
     void printProgress(float now, float total);
 };
 

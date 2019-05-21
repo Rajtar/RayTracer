@@ -6,10 +6,11 @@
 
 class Material {
 public:
-    LightIntensity diffuse, ambient, specular, transmition;
-    float smoothness;
+    LightIntensity diffuse, ambient, specular;
+    double smoothness;
 
-    Material(const LightIntensity &diffuse, const LightIntensity &ambient, const LightIntensity &specular, const LightIntensity &transmition);
+    Material(const LightIntensity &diffuse, const LightIntensity &ambient, const LightIntensity &specular,
+             double smoothness);
     Material() = default;
 };
 

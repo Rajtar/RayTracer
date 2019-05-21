@@ -46,7 +46,7 @@ void OBJLoader::parseVertex(std::vector<std::string> vertexLine, Vector3 positio
 }
 
 void OBJLoader::parseNormal(std::vector<std::string> normalLine) {
-    Vector3 normal = Vector3(std::stod(normalLine[0]), std::stod(normalLine[1]), std::stod(normalLine[2])).normalize();
+    Vector3 normal = Vector3(std::stod(normalLine[0]), std::stod(normalLine[1]), std::stod(normalLine[2])).normalized();
     this->normals.push_back(normal);
 }
 

@@ -11,7 +11,7 @@ Vector3::Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
 
 Vector3::Vector3(double xyz) : x(xyz), y(xyz), z(xyz) {}
 
-Vector3 Vector3::normalize() const {
+Vector3 Vector3::normalized() const {
     double magnitude = getMagnitude();
     if (magnitude != 0) {
         return (*this / magnitude);
