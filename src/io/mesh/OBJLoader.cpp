@@ -76,14 +76,14 @@ void OBJLoader::parseFace(std::vector<std::string> faceLine) {
 
     Triangle face;
     if(faceNormalIndices.empty()) {
-        face = Triangle(vertices[(faceVertexIndices[0] - 1)], vertices[(faceVertexIndices[1] - 1)], vertices[(faceVertexIndices[2] - 1)], LightIntensity(1, 0, 0));
+        face = Triangle(vertices[(faceVertexIndices[0] - 1)], vertices[(faceVertexIndices[1] - 1)], vertices[(faceVertexIndices[2] - 1)], Material());
     } else {
         Vector3 faceNormal;
         for (const auto &vertexNormalIndex : faceNormalIndices) {
             faceNormal += normals[vertexNormalIndex - 1];
         }
         faceNormal /= faceNormalIndices.size();
-        face = Triangle(vertices[(faceVertexIndices[0] - 1)], vertices[(faceVertexIndices[1] - 1)], vertices[(faceVertexIndices[2] - 1)], faceNormal, LightIntensity(1, 0, 0));
+        face = Triangle(vertices[(faceVertexIndices[0] - 1)], vertices[(faceVertexIndices[1] - 1)], vertices[(faceVertexIndices[2] - 1)], faceNormal, Material());
     }
 
     this->faces.push_back(face);

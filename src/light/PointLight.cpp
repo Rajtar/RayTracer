@@ -18,7 +18,6 @@ PointLight::PointLight(const LightIntensity &diffuseIntensity, const LightIntens
 LightIntensity
 PointLight::calculateLightIntensity(std::list<std::shared_ptr<Primitive>> scenePrimitives, Vector3 cameraPosition,
                                     std::shared_ptr<Primitive> intersectedPrimitive, Vector3 intersectionPoint) {
-
     if(!isAccessible(intersectionPoint, scenePrimitives)) {
         return LightIntensity(0, 0, 0);
     }
@@ -49,7 +48,7 @@ PointLight::calculateLightIntensity(std::list<std::shared_ptr<Primitive>> sceneP
 
     //Phong equation
     LightIntensity I = kA * iA + (kD * iD * (L.dot(N)) + kS * iS * pow(R.dot(V), alpha));
-//    double distance = (this->position - intersectionPoint).getMagnitude();
+//    double distance = (this->position - intersectionPoint).getMagnitude() / 100.0;
 //    LightIntensity attenuatedI = LightIntensity(I.r / distance, I.g / distance, I.b / distance);
     return I;
 }

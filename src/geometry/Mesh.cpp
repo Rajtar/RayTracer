@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "Mesh.h"
 
-Mesh::Mesh(const LightIntensity &color) : Primitive(color) {}
+Mesh::Mesh(Material material) : Primitive(material) {}
 
 bool Mesh::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
     for (const auto &face : faces) {

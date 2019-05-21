@@ -3,18 +3,11 @@
 
 #define MINUS_ZERO -0.0001
 
-Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, LightIntensity color) : Primitive(color),
-                                                                                                 a(a),
-                                                                                                 b(b),
-                                                                                                 c(c) {
-    this->normal = (b - a).cross(c - a).normalized();
-}
-
-Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Vector3 &normal, LightIntensity color) :Primitive(color),
-                                                                                                                       a(a),
-                                                                                                                       b(b),
-                                                                                                                       c(c),
-                                                                                                                       normal(normal) {}
+Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Vector3 &normal, Material material) : Primitive(material),
+                                                                                                                     a(a),
+                                                                                                                     b(b),
+                                                                                                                     c(c),
+                                                                                                                     normal(normal) {}
 
 Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, Material material) : Primitive(material),
                                                                                                 a(a),
@@ -24,7 +17,7 @@ Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, Materia
 }
 
 bool Triangle::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
-    Plane plane(a, normal, this->getDiffuse());
+    Plane plane(a, normal, this->material);
     std::vector<Vector3> planeIntersections;
     if(!plane.intersect(ray, planeIntersections)) {
         return false;

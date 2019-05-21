@@ -11,7 +11,6 @@ public:
     Material material;
 
     Primitive() = default;
-    explicit Primitive(LightIntensity color);
     explicit Primitive(Material material);
 
     virtual bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const = 0;

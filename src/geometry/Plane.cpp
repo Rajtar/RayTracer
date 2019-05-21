@@ -1,10 +1,6 @@
 
 #include "Plane.h"
 
-Plane::Plane(const Vector3 &point, const Vector3 &normal, LightIntensity color) : Primitive(color), point(point) {
-    this->normal = normal.normalized();
-}
-
 Plane::Plane(const Vector3 &point, const Vector3 &normal, Material material) : Primitive(material), point(point) {
     this->normal = normal.normalized();
 }

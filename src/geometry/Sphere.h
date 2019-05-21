@@ -11,7 +11,6 @@ public:
     Vector3 center;
     float radius;
 
-    Sphere(Vector3 center, float radius, LightIntensity color);
     Sphere(Vector3 center, float radius, Material material);
 
     bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const override;

@@ -9,7 +9,7 @@ class Mesh : public Primitive {
 public:
     std::vector<Triangle> faces;
 
-    explicit Mesh(const LightIntensity &color);
+    Mesh(Material material);
 
     bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const override;
 
