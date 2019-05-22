@@ -1,24 +1,18 @@
 #include <cmath>
 #include "PointLight.h"
 
-PointLight::PointLight(const LightIntensity &commonIntensity, const Vector3 &position, float constAttenuation,
-                       float linearAttenuation, float quadAttenuation) : Light(commonIntensity), position(position),
-                                                                         constAttenuation(constAttenuation),
-                                                                         linearAttenuation(linearAttenuation),
-                                                                         quadAttenuation(quadAttenuation) {}
+PointLight::PointLight(const LightIntensity &commonIntensity, const Vector3 &position)
+        : Light(commonIntensity), position(position) {}
 
 PointLight::PointLight(const LightIntensity &diffuseIntensity, const LightIntensity &ambientIntensity,
-                       const LightIntensity &specularIntensity, const Vector3 &position, float constAttenuation,
-                       float linearAttenuation, float quadAttenuation) : Light(diffuseIntensity, ambientIntensity,
-                                                                               specularIntensity), position(position),
-                                                                         constAttenuation(constAttenuation),
-                                                                         linearAttenuation(linearAttenuation),
-                                                                         quadAttenuation(quadAttenuation) {}
+                       const LightIntensity &specularIntensity, const Vector3 &position) : Light(diffuseIntensity,
+                                                                                                 ambientIntensity,
+                                                                                                 specularIntensity),
+                                                                                           position(position) {}
 
-LightIntensity
-PointLight::calculateLightIntensity(std::list<std::shared_ptr<Primitive>> scenePrimitives, Vector3 cameraPosition,
+LightIntensity PointLight::calculateLightIntensity(std::list<std::shared_ptr<Primitive>> scenePrimitives, Vector3 cameraPosition,
                                     std::shared_ptr<Primitive> intersectedPrimitive, Vector3 intersectionPoint) {
-    if(!isAccessible(intersectionPoint, scenePrimitives)) {
+    if (!isAccessible(intersectionPoint, scenePrimitives)) {
         return LightIntensity(0, 0, 0);
     }
 
@@ -57,7 +51,7 @@ bool PointLight::isAccessible(Vector3 reflectionPoint, std::list<std::shared_ptr
     Ray primitiveToLight(reflectionPoint, this->position);
     std::vector<Vector3> intersections;
     for (const auto &primitive : scenePrimitives) {
-        if(primitive.get()->intersect(primitiveToLight, intersections)) {
+        if (primitive.get()->intersect(primitiveToLight, intersections)) {
             return false;
         }
     }

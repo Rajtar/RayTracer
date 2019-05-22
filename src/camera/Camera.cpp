@@ -131,10 +131,12 @@ LightIntensity Camera::calculatePixelColor(Scene scene,
                                            std::shared_ptr<Primitive> intersectedPrimitive,
                                            Vector3 intersectionPoint) {
     scene.primitives.remove(intersectedPrimitive);
+    LightIntensity cumulativeIntensity;
     for (const auto &light : scene.lights) {
-        return light.get()->calculateLightIntensity(scene.primitives, this->position, intersectedPrimitive,
+        cumulativeIntensity += light.get()->calculateLightIntensity(scene.primitives, this->position, intersectedPrimitive,
                                                     intersectionPoint);
     }
+    return cumulativeIntensity;
 }
 
 void Camera::printProgress(float now, float total) {

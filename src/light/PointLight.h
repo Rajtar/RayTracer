@@ -11,16 +11,11 @@
 class PointLight : public Light {
 public:
     Vector3 position;
-    float constAttenuation;
-    float linearAttenuation;
-    float quadAttenuation;
 
-    PointLight(const LightIntensity &commonIntensity, const Vector3 &position, float constAttenuation,
-               float linearAttenuation, float quadAttenuation);
+    PointLight(const LightIntensity &commonIntensity, const Vector3 &position);
 
     PointLight(const LightIntensity &diffuseIntensity, const LightIntensity &ambientIntensity,
-               const LightIntensity &specularIntensity, const Vector3 &position, float constAttenuation,
-               float linearAttenuation, float quadAttenuation);
+                   const LightIntensity &specularIntensity, const Vector3 &position);
 
     LightIntensity
     calculateLightIntensity(std::list<std::shared_ptr<Primitive>> scenePrimitives, Vector3 cameraPosition,
