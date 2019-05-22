@@ -21,7 +21,7 @@ int main() {
 
     OBJLoader loader;
 
-    Material red(LightIntensity(1, 0, 0), LightIntensity(0, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
+    Material red(LightIntensity(1, 0, 0), LightIntensity(1, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material blue(LightIntensity(0, 0, 1), LightIntensity(0, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
 
 //    std::shared_ptr<Mesh> mesh(new Mesh(LightIntensity(0.33, 0.66, 0.99)));
@@ -31,7 +31,7 @@ int main() {
 
 //    loader.loadMesh("../models/teapot.obj", mesh, Vector3(0, 0, 5));
 
-    std::shared_ptr<PointLight> pointLight(new PointLight(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.2, 0.2, 0.2), Vector3(0, 0, -5), 1, 1, 1));
+    std::shared_ptr<PointLight> pointLight(new PointLight(LightIntensity(1, 1, 1), LightIntensity(0.2, 0.2, 0.2), LightIntensity(0.2, 0.2, 0.2), Vector3(-20, 0, 15), 1, 1, 1));
 
     Scene scene;
     scene.addPrimitive(sphere1);
