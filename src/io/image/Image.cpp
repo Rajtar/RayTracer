@@ -4,10 +4,10 @@ Image::Image(unsigned int width, unsigned int height) : width(width), height(hei
 
 Image::Image(std::string filepath) {}
 
-unsigned int Image::getWidth() {
+unsigned int Image::getWidth() const {
     return width;
 }
 
-unsigned int Image::getHeight() {
+unsigned int Image::getHeight() const {
     return height;
 }

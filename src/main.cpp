@@ -10,6 +10,7 @@
 #include "camera/OrthographicCamera.h"
 #include "geometry/Plane.h"
 #include "light/PointLight.h"
+#include "light/Texture.h"
 #include <chrono>
 
 const std::string currentDateTime();
@@ -21,9 +22,14 @@ int main() {
 
     OBJLoader loader;
 
+    BitmapImage brickBmp("../textures/brick.bmp");
+    Texture brickTexture(brickBmp);
+
     Material red(LightIntensity(1, 0, 0), LightIntensity(1, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material blue(LightIntensity(0, 0, 1), LightIntensity(0, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material yellow(LightIntensity(1, 1, 0), LightIntensity(1, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
+    Material brick(brickTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
+
 
     std::shared_ptr<Mesh> mesh(new Mesh(red));
     std::shared_ptr<Plane> floor(new Plane(Vector3(0, -10, 6), Vector3(0, 1, 0), yellow));
@@ -31,6 +37,8 @@ int main() {
 //    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(0, 2, 15), 3, red));
 
     loader.loadMesh("../models/dodecahedron.obj", mesh, true, Vector3(0, -2, 15));
+
+
 
     std::shared_ptr<PointLight> whiteLight(
             new PointLight(LightIntensity(1, 1, 1), LightIntensity(0.2, 0.2, 0.2), LightIntensity(0.2, 0.2, 0.2),

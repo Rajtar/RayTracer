@@ -11,15 +11,14 @@ public:
     explicit BitmapImage(std::string filepath);
 
     void saveToFile(const std::string &filename) override;
-    LightIntensity readPixel(unsigned int x, unsigned int y) override;
+    LightIntensity readPixel(unsigned int x, unsigned int y) const override;
     void writePixel(unsigned int x, unsigned int y, const LightIntensity& intensity) override;
     void writePixel(unsigned int x, unsigned int y, unsigned char red, unsigned char green, unsigned char blue) override;
     void writeAll(const LightIntensity& intensity) override;
     void writeAll(unsigned char red, unsigned char green, unsigned char blue) override;
 
-    unsigned int getWidth() override;
-
-    unsigned int getHeight() override;
+    unsigned int getWidth() const override;
+    unsigned int getHeight() const override;
 
 private:
     bitmap_image data;

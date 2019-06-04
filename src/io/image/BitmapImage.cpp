@@ -12,7 +12,7 @@ void BitmapImage::saveToFile(const std::string &filename) {
     this->data.save_image(filename);
 }
 
-LightIntensity BitmapImage::readPixel(unsigned int x, unsigned int y) {
+LightIntensity BitmapImage::readPixel(unsigned int x, unsigned int y) const {
     rgb color = this->data.get_pixel(x, y);
     return LightIntensity(color.red / 255.0F, color.green / 255.0F, color.blue / 255.0F);
 }
@@ -35,10 +35,10 @@ void BitmapImage::writeAll(unsigned char red, unsigned char green, unsigned char
     this->data.set_all_channels(red, green, blue);
 }
 
-unsigned int BitmapImage::getWidth() {
+unsigned int BitmapImage::getWidth() const {
     return data.width();
 }
 
-unsigned int BitmapImage::getHeight() {
+unsigned int BitmapImage::getHeight() const {
     return data.height();
 }
