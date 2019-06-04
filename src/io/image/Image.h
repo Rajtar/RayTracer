@@ -10,9 +10,11 @@ private:
     unsigned int width, height;
 public:
     Image(unsigned int width, unsigned int height);
+    Image(std::string filepath);
 
-    unsigned int getWidth();
-    unsigned int getHeight();
+    virtual unsigned int getWidth();
+
+    virtual unsigned int getHeight();
 
     virtual void saveToFile(const std::string &filename) = 0;
     virtual LightIntensity readPixel(unsigned int x, unsigned int y) = 0;

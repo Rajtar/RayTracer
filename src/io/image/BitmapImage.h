@@ -8,6 +8,7 @@
 class BitmapImage : public Image {
 public:
     BitmapImage(unsigned int width, unsigned int height);
+    explicit BitmapImage(std::string filepath);
 
     void saveToFile(const std::string &filename) override;
     LightIntensity readPixel(unsigned int x, unsigned int y) override;
@@ -15,6 +16,10 @@ public:
     void writePixel(unsigned int x, unsigned int y, unsigned char red, unsigned char green, unsigned char blue) override;
     void writeAll(const LightIntensity& intensity) override;
     void writeAll(unsigned char red, unsigned char green, unsigned char blue) override;
+
+    unsigned int getWidth() override;
+
+    unsigned int getHeight() override;
 
 private:
     bitmap_image data;

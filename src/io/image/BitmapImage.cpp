@@ -4,6 +4,10 @@ BitmapImage::BitmapImage(const unsigned int width, const unsigned int height) : 
     this->data = bitmap_image(width, height);
 }
 
+BitmapImage::BitmapImage(std::string filepath) : Image(filepath) {
+    this->data = bitmap_image(filepath);
+}
+
 void BitmapImage::saveToFile(const std::string &filename) {
     this->data.save_image(filename);
 }
@@ -29,4 +33,12 @@ void BitmapImage::writeAll(const LightIntensity &intensity) {
 
 void BitmapImage::writeAll(unsigned char red, unsigned char green, unsigned char blue) {
     this->data.set_all_channels(red, green, blue);
+}
+
+unsigned int BitmapImage::getWidth() {
+    return data.width();
+}
+
+unsigned int BitmapImage::getHeight() {
+    return data.height();
 }

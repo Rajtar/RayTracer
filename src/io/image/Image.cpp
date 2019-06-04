@@ -2,6 +2,8 @@
 
 Image::Image(unsigned int width, unsigned int height) : width(width), height(height) {}
 
+Image::Image(std::string filepath) {}
+
 unsigned int Image::getWidth() {
     return width;
 }
