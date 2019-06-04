@@ -22,10 +22,10 @@ int main() {
 
     OBJLoader loader;
 
-    BitmapImage brickBmp("../textures/brick.bmp");
-    BitmapImage dogeBMP("../textures/checkertexture.bmp");
+    BitmapImage brickBMP("../textures/brick.bmp");
+    BitmapImage dogeBMP("../textures/doge.bmp");
 
-    Texture brickTexture(brickBmp);
+    Texture brickTexture(brickBMP);
     Texture dogeTexture(dogeBMP);
 
     Material red(LightIntensity(1, 0, 0), LightIntensity(1, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
