@@ -3,24 +3,20 @@
 
 Mesh::Mesh(Material material) : Primitive(material) {}
 
-bool Mesh::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
+std::vector<Intersection> Mesh::intersect(const Ray &ray) const {
+    std::vector<Intersection> meshIntersections;
     for (const auto &face : faces) {
-        std::vector<Vector3> faceIntersections;
-        if(face.intersect(ray, faceIntersections)) {
-            intersections.push_back(faceIntersections.front());
+        std::vector<Intersection> faceIntersections = face.intersect(ray);
+        if (!faceIntersections.empty()) {
+            meshIntersections.push_back(faceIntersections.front());
         }
     }
 
-    if(!intersections.empty()) {
-        std::sort(intersections.begin(), intersections.end(), [&ray] ( Vector3 a, Vector3 b ) {
-            return (a - ray.origin).getMagnitude() < (b - ray.origin).getMagnitude();
+    if(!meshIntersections.empty()) {
+        std::sort(meshIntersections.begin(), meshIntersections.end(), [&ray] ( Intersection a, Intersection b ) {
+            return (a.position - ray.origin).getMagnitude() < (b.position - ray.origin).getMagnitude();
         });
-        return true;
     }
 
-    return false;
-}
-
-Vector3 Mesh::getNormalAt(Vector3 point) {
-    return Vector3(); // TODO
+    return meshIntersections;
 }

@@ -1,25 +1,22 @@
 
 #include "Plane.h"
+#include "Intersection.h"
 
 Plane::Plane(const Vector3 &point, const Vector3 &normal, Material material) : Primitive(material), point(point) {
     this->normal = normal.normalized();
 }
 
-bool Plane::intersect(const Ray &ray, std::vector<Vector3> &intersections) const {
+std::vector<Intersection> Plane::intersect(const Ray &ray) const {
     double denominator = this->normal.dot(ray.direction);
+    std::vector<Intersection> intersections;
     if(denominator > 0) {
         Vector3 distance = this->point - ray.origin;
         double t = distance.dot(this->normal) / denominator;
-
         if(t > 0) {
-            intersections.push_back(t * ray.direction + ray.origin);
-            return true;
+            Intersection intersection(t * ray.direction + ray.origin, this->normal);
+            intersections.push_back(intersection);
         }
     }
-
-    return false;
+    return intersections;
 }
 
-Vector3 Plane::getNormalAt(Vector3 point) {
-    return this->normal;
-}

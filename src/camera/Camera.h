@@ -26,7 +26,7 @@ private:
     virtual void renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
     LightIntensity calculatePixelColor(Scene scene,
                                        std::shared_ptr<Primitive> intersectedPrimitive,
-                                       Vector3 intersectionPoint);
+                                       Intersection intersection);
     void printProgress(float now, float total);
 };
 

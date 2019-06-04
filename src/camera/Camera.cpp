@@ -38,19 +38,18 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
 
             LightIntensity pixelColor(0, 0, 0);
             Ray ray = getRay(xCenter, yCenter);
-            std::vector<Vector3> intersections;
 
             bool intersected = false;
             for (const auto &primitive : scene.primitives) {
-                if (primitive->intersect(ray, intersections)) {
+                std::vector<Intersection> intersections = primitive->intersect(ray);
+                if (!intersections.empty()) {
                     intersected = true;
-                    double intersectionDepth = (position - intersections.front()).getMagnitude();
+                    double intersectionDepth = (position - intersections.front().position).getMagnitude();
                     if(intersectionDepth < lowestPixelDepth) {
                         lowestPixelDepth = intersectionDepth;
                         pixelColor = calculatePixelColor(scene, primitive, intersections.front());
                     }
                 }
-                intersections.clear();
             }
             if (intersected) {
                 targetImage->writePixel(x, y, pixelColor);
@@ -99,22 +98,21 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
             };
 
             bool intersected = false;
-            std::vector<Vector3> intersections;
             Vector3 pixelColor;
             for (const auto &ray : rays) {
                 double lowestPixelDepth = std::numeric_limits<double>::max();
                 Vector3 colorToAdd;
                 for (const auto &primitive : scene.primitives) {
-                    if (primitive->intersect(ray, intersections)) {
+                    std::vector<Intersection> intersections = primitive->intersect(ray);
+                    if (!intersections.empty()) {
                         intersected = true;
-                        double intersectionDepth = (position - intersections.front()).getMagnitude();
+                        double intersectionDepth = (position - intersections.front().position).getMagnitude();
                         if (intersectionDepth < lowestPixelDepth) {
                             lowestPixelDepth = intersectionDepth;
                             LightIntensity calculatedColor = calculatePixelColor(scene, primitive, intersections.front());
                             colorToAdd = Vector3(calculatedColor.r, calculatedColor.g, calculatedColor.b);
                         }
                     }
-                    intersections.clear();
                 }
 
                 pixelColor += colorToAdd;
@@ -129,12 +127,12 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
 
 LightIntensity Camera::calculatePixelColor(Scene scene,
                                            std::shared_ptr<Primitive> intersectedPrimitive,
-                                           Vector3 intersectionPoint) {
+                                           Intersection intersection) {
     scene.primitives.remove(intersectedPrimitive);
     LightIntensity cumulativeIntensity;
     for (const auto &light : scene.lights) {
         cumulativeIntensity += light.get()->calculateLightIntensity(scene.primitives, this->position, intersectedPrimitive,
-                                                    intersectionPoint);
+                                                    intersection);
     }
     return cumulativeIntensity;
 }

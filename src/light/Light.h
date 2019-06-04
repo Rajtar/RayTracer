@@ -24,7 +24,7 @@ public:
 
     virtual LightIntensity
     calculateLightIntensity(std::list<std::shared_ptr<Primitive>> scenePrimitives, Vector3 cameraPosition,
-                            std::shared_ptr<Primitive> intersectedPrimitive, Vector3 intersectionPoint) = 0;
+                            std::shared_ptr<Primitive> intersectedPrimitive, Intersection intersection) = 0;
 
     /// Checks if ray can get from surface to light.
     /// \param reflectionPoint point from which the ray is being reflected

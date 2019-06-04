@@ -19,7 +19,7 @@ public:
 
     LightIntensity
     calculateLightIntensity(std::list<std::shared_ptr<Primitive>> scenePrimitives, Vector3 cameraPosition,
-                            std::shared_ptr<Primitive> intersectedPrimitive, Vector3 intersectionPoint) override;
+                            std::shared_ptr<Primitive> intersectedPrimitive, Intersection intersection) override;
 
     bool isAccessible(Vector3 reflectionPoint, std::list<std::shared_ptr<Primitive>> scenePrimitives) override;
 };

@@ -5,6 +5,7 @@
 #include "Vector3.h"
 #include "Ray.h"
 #include "../light/Material.h"
+#include "Intersection.h"
 
 class Primitive {
 public:
@@ -13,8 +14,7 @@ public:
     Primitive() = default;
     explicit Primitive(Material material);
 
-    virtual bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const = 0;
-    virtual Vector3 getNormalAt(Vector3 point) = 0;
+    virtual std::vector<Intersection> intersect(const Ray &ray) const = 0;
 
     LightIntensity getDiffuse() const;
     LightIntensity getAmbient() const;

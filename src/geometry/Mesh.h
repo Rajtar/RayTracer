@@ -4,6 +4,7 @@
 
 #include "Primitive.h"
 #include "Triangle.h"
+#include "Intersection.h"
 
 class Mesh : public Primitive {
 public:
@@ -11,9 +12,7 @@ public:
 
     Mesh(Material material);
 
-    bool intersect(const Ray &ray, std::vector<Vector3> &intersections) const override;
-
-    Vector3 getNormalAt(Vector3 point) override;
+    std::vector<Intersection> intersect(const Ray &ray) const override;
 };
 
 
