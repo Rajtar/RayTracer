@@ -34,7 +34,6 @@ LightIntensity PointLight::calculateLightIntensity(std::list<std::shared_ptr<Pri
     Vector3 N = intersection.normal.normalized();
 
     // reflection direction vector
-    //Vector3 R = L - (N * N.dot(L) * 2.0f); //werjsa z instrukcji,
     Vector3 R = (2.0f * (L.dot(N)) * N - L).normalized();
 
     // vector from surface to viewer

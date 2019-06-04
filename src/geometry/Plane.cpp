@@ -1,4 +1,5 @@
 
+#include <cmath>
 #include "Plane.h"
 #include "Intersection.h"
 
@@ -9,7 +10,7 @@ Plane::Plane(const Vector3 &point, const Vector3 &normal, Material material) : P
 std::vector<Intersection> Plane::intersect(const Ray &ray) const {
     double denominator = this->normal.dot(ray.direction);
     std::vector<Intersection> intersections;
-    if(denominator > 0) {
+    if(fabs(denominator) > 0.0001f) {
         Vector3 distance = this->point - ray.origin;
         double t = distance.dot(this->normal) / denominator;
         if(t > 0) {

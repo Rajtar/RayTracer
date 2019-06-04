@@ -6,7 +6,8 @@
 #include "OBJLoader.h"
 #include "../../static/StringUtils.h"
 
-void OBJLoader::loadMesh(const std::string &filePath, std::shared_ptr<Mesh> targetMesh, const Vector3 &positionOffset) {
+void OBJLoader::loadMesh(const std::string &filePath, std::shared_ptr<Mesh> targetMesh, bool loadNormals,
+                         const Vector3 &positionOffset) {
     init();
     std::cout << "Parsing file: " << filePath << std::endl;
 
@@ -28,7 +29,7 @@ void OBJLoader::loadMesh(const std::string &filePath, std::shared_ptr<Mesh> targ
                 parseNormal(normalLine);
             } else if(StringUtils::toLower(splitLine.front()) == "f") {
                 std::vector<std::string> faceLine(splitLine.begin() + 1, splitLine.end());
-                parseFace(faceLine);
+                parseFace(faceLine, loadNormals);
             }
         }
     }
@@ -50,7 +51,7 @@ void OBJLoader::parseNormal(std::vector<std::string> normalLine) {
     this->normals.push_back(normal);
 }
 
-void OBJLoader::parseFace(std::vector<std::string> faceLine) {
+void OBJLoader::parseFace(std::vector<std::string> faceLine, bool loadNormals) {
     std::vector<int> faceVertexIndices;
     std::vector<int> faceTextureIndices;
     std::vector<int> faceNormalIndices;
@@ -75,7 +76,7 @@ void OBJLoader::parseFace(std::vector<std::string> faceLine) {
     }
 
     Triangle face;
-    if(faceNormalIndices.empty()) {
+    if(faceNormalIndices.empty() || !loadNormals) {
         face = Triangle(vertices[(faceVertexIndices[0] - 1)], vertices[(faceVertexIndices[1] - 1)], vertices[(faceVertexIndices[2] - 1)], Material());
     } else {
         Vector3 faceNormal;
