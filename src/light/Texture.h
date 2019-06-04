@@ -14,6 +14,10 @@ public:
 
     LightIntensity getColorAt(unsigned int x, unsigned int y) const;
 
+    int getWidth() const;
+
+    int getHeight() const;
+
 private:
     int width, height;
     std::vector<LightIntensity> colorMap;

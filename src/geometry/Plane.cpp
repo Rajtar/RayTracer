@@ -21,3 +21,14 @@ std::vector<Intersection> Plane::intersect(const Ray &ray) const {
     return intersections;
 }
 
+void Plane::getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight, int &row,
+                                int &column) const {
+    Vector3 localIntersectionCoords = (this->point - intersection).normalized();
+
+    float u = (localIntersectionCoords.z + 1) / 2.0f;
+    float v = (localIntersectionCoords.x + 1) / 2.0f;
+
+    column = (int) (textureWidth - 1) * u;
+    row = (int) (textureHeight - 1) * v;
+}
+

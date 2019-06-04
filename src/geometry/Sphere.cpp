@@ -44,3 +44,14 @@ std::vector<Intersection> Sphere::intersect(const Ray &ray) const {
 Vector3 Sphere::getNormalAt(Vector3 point) const {
     return (point - this->center).normalized();
 }
+
+void Sphere::getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight, int &row,
+                                 int &column) const {
+    Vector3 localIntersectionCoords = (this->center - intersection).normalized();
+
+    float u = 0.5f + ((atan2f(localIntersectionCoords.z, localIntersectionCoords.x)/(2.0 * M_PI)));
+    float v = 0.5f - asinf(localIntersectionCoords.y) / M_PI;
+
+    column = (int) (textureWidth - 1) * u;
+    row = (int) (textureHeight - 1) * v;
+}

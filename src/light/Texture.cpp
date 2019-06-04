@@ -15,3 +15,11 @@ LightIntensity Texture::getColorAt(unsigned int x, unsigned int y) const {
 }
 
 Texture::Texture() {}
+
+int Texture::getWidth() const {
+    return width;
+}
+
+int Texture::getHeight() const {
+    return height;
+}

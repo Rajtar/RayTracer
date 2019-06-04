@@ -17,24 +17,27 @@ const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 500,
-                       height = 500;
+    const unsigned int width = 150,
+                       height = 150;
 
     OBJLoader loader;
 
     BitmapImage brickBmp("../textures/brick.bmp");
+    BitmapImage dogeBMP("../textures/checkertexture.bmp");
+
     Texture brickTexture(brickBmp);
+    Texture dogeTexture(dogeBMP);
 
     Material red(LightIntensity(1, 0, 0), LightIntensity(1, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material blue(LightIntensity(0, 0, 1), LightIntensity(0, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material yellow(LightIntensity(1, 1, 0), LightIntensity(1, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material brick(brickTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
-
+    Material doge(dogeTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
 
     std::shared_ptr<Mesh> mesh(new Mesh(red));
-    std::shared_ptr<Plane> floor(new Plane(Vector3(0, -10, 6), Vector3(0, 1, 0), yellow));
+    std::shared_ptr<Plane> floor(new Plane(Vector3(0, -10, 6), Vector3(0, 1, 0), doge));
 //    std::shared_ptr<Triangle> triangle(new Triangle(Vector3(-1, -2, 1), Vector3(1, -2, 1), Vector3(0, 2, 1), blue));
-//    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(0, 2, 15), 3, red));
+    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(0, 2, 15), 3, brick));
 
     loader.loadMesh("../models/dodecahedron.obj", mesh, true, Vector3(0, -2, 15));
 
@@ -45,10 +48,10 @@ int main() {
                            Vector3(0, 5, 5)));
 
     Scene scene;
-//    scene.addPrimitive(sphere1);
+    scene.addPrimitive(sphere1);
     scene.addPrimitive(floor);
 //    scene.addPrimitive(triangle);
-    scene.addPrimitive(mesh);
+//    scene.addPrimitive(mesh);
     scene.addLight(whiteLight);
 
     PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);

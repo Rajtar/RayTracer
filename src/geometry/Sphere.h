@@ -16,6 +16,9 @@ public:
 
     std::vector<Intersection> intersect(const Ray &ray) const override;
 
+    void getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight, int &row,
+                             int &column) const override;
+
     Vector3 getNormalAt(Vector3 point) const;
 };
 
