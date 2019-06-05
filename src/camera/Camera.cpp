@@ -129,9 +129,8 @@ LightIntensity Camera::calculatePixelColor(Scene scene,
                                            std::shared_ptr<Primitive> intersectedPrimitive,
                                            Intersection intersection) {
     //TODO: check if primitive contains texture
-
     int textureX, textureY;
-    Texture objectTexture = intersectedPrimitive->material.texture;
+    Texture& objectTexture = intersectedPrimitive->material.texture;
 
     intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(), objectTexture.getHeight(), textureX, textureY);
 
