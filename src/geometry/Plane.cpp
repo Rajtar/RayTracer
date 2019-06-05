@@ -23,10 +23,15 @@ std::vector<Intersection> Plane::intersect(const Ray &ray) const {
 
 void Plane::getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight, int &row,
                                 int &column) const {
-    Vector3 localIntersectionCoords = (this->point - intersection).normalized();
+//    Vector3 localIntersectionCoords = (this->point - intersection).normalized();
+//    float u = (localIntersectionCoords.z + 1) / 2.0f;
+//    float v = (localIntersectionCoords.x + 1) / 2.0f;
 
-    float u = (localIntersectionCoords.z + 1) / 2.0f;
-    float v = (localIntersectionCoords.x + 1) / 2.0f;
+    Vector3 uAxis(this->normal.y, this->normal.z, -this->normal.x);
+    Vector3 vAxis = uAxis.cross(this->normal);
+
+    double u = fabs(intersection.normalized().dot(uAxis) * 1);
+    double v = fabs(intersection.normalized().dot(vAxis) * 1);
 
     column = (int) (textureWidth - 1) * u;
     row = (int) (textureHeight - 1) * v;
