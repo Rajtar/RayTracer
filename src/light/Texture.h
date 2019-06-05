@@ -14,8 +14,8 @@ public:
 
     LightIntensity getColorAt(unsigned int x, unsigned int y) const;
 
+    bool isEmpty() const;
     int getWidth() const;
-
     int getHeight() const;
 
 private:

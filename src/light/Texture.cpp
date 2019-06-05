@@ -23,3 +23,7 @@ int Texture::getWidth() const {
 int Texture::getHeight() const {
     return height;
 }
+
+bool Texture::isEmpty() const {
+    return this->colorMap.empty();
+}

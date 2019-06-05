@@ -131,10 +131,12 @@ LightIntensity Camera::calculatePixelColor(Scene scene,
     //TODO: check if primitive contains texture
     int textureX, textureY;
     Texture& objectTexture = intersectedPrimitive->material.texture;
+    LightIntensity textureColor(1, 1, 1);
 
-    intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(), objectTexture.getHeight(), textureX, textureY);
-
-    LightIntensity textureColor = objectTexture.getColorAt(textureX, textureY);
+    if (!objectTexture.isEmpty()) {
+        intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(), objectTexture.getHeight(), textureX, textureY);
+        textureColor = objectTexture.getColorAt(textureX, textureY);
+    }
 
     scene.primitives.remove(intersectedPrimitive);
     LightIntensity cumulativeIntensity;
