@@ -17,9 +17,8 @@ public:
 
     virtual std::vector<Intersection> intersect(const Ray &ray) const = 0;
 
-    virtual void
-    getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight, int &row,
-                        int &column) const;
+    virtual void getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight,
+                                     int &row, int &column) const = 0;
 
     LightIntensity getDiffuse() const;
 

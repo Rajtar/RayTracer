@@ -46,4 +46,10 @@ std::vector<Intersection> Triangle::intersect(const Ray &ray) const {
     return intersections;
 }
 
+void
+Triangle::getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight, int &row,
+                              int &column) const {
+    //TODO
+}
+
 

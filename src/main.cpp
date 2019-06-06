@@ -22,31 +22,41 @@ int main() {
 
     OBJLoader loader;
 
-    BitmapImage brickBMP("../textures/brick.bmp");
+    BitmapImage colorfulBMP("../textures/colorful.bmp");
     BitmapImage checkerBMP("../textures/checker.bmp");
 
-    Texture brickTexture(brickBMP);
+    Texture colorfulTexture(colorfulBMP);
     Texture checkerTexture(checkerBMP);
 
     Material red(LightIntensity(1, 0, 0), LightIntensity(1, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material blue(LightIntensity(0, 0, 1), LightIntensity(0, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material yellow(LightIntensity(1, 1, 0), LightIntensity(1, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
-    Material brick(brickTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
+    Material white(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
+    Material green(LightIntensity(0, 1, 0), LightIntensity(0, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
+    Material colorful(colorfulTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material checker(checkerTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
 
     std::shared_ptr<Mesh> mesh(new Mesh(red));
-    std::shared_ptr<Plane> floor(new Plane(Vector3(0, -10, 17), Vector3(0, 0, -1), checker));
-    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(0, 2, 15), 3, brick));
+    std::shared_ptr<Plane> floor(new Plane(Vector3(0, -10, 0), Vector3(0, 1, 0), white));
+    std::shared_ptr<Plane> roof(new Plane(Vector3(0, 15, 0), Vector3(0, -1, 0), white));
+    std::shared_ptr<Plane> backWall(new Plane(Vector3(0, 0, 40), Vector3(0, 0, -1), white));
+    std::shared_ptr<Plane> rightWall(new Plane(Vector3(15, 0, 0), Vector3(-1, 0, 0), green));
+    std::shared_ptr<Plane> leftWall(new Plane(Vector3(-15, 0, 0), Vector3(1, 0, 0), red));
+    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(0, -2, 30), 3, colorful));
 
-    loader.loadMesh("../models/dodecahedron.obj", mesh, true, Vector3(0, -2, 15));
+//    loader.loadMesh("../models/dodecahedron.obj", mesh, true, Vector3(0, -2, 15));
 
     std::shared_ptr<PointLight> whiteLight(
-            new PointLight(LightIntensity(1, 1, 1), LightIntensity(0.2, 0.2, 0.2), LightIntensity(0.2, 0.2, 0.2),
-                           Vector3(0, 5, 5)));
+            new PointLight(LightIntensity(0.8, 0.8, 0.4), LightIntensity(0.3, 0.3, 0.3), LightIntensity(0.5, 0.5, 0.5),
+                           Vector3(0, 9, 30)));
 
     Scene scene;
     scene.addPrimitive(sphere1);
     scene.addPrimitive(floor);
+    scene.addPrimitive(roof);
+    scene.addPrimitive(rightWall);
+    scene.addPrimitive(leftWall);
+    scene.addPrimitive(backWall);
 //    scene.addPrimitive(mesh);
     scene.addLight(whiteLight);
 
@@ -54,7 +64,6 @@ int main() {
     std::unique_ptr<Image> image(new BitmapImage(width, height));
 
     image.get()->writeAll(86, 151, 255);
-    drawGrid(*image, 25, 50);
 
     std::cout << "Rendering scene with: " << scene.primitives.size() << (scene.primitives.size() == 1 ? " object\n" : " objects\n") ;
     auto startTime = std::chrono::system_clock::now();

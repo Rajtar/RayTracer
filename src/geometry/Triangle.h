@@ -15,6 +15,9 @@ public:
     Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, Material material);
 
     std::vector<Intersection> intersect(const Ray &ray) const override;
+
+    void getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight, int &row,
+                             int &column) const override;
 };
 
 

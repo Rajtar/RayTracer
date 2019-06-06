@@ -128,7 +128,6 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
 LightIntensity Camera::calculatePixelColor(Scene scene,
                                            std::shared_ptr<Primitive> intersectedPrimitive,
                                            Intersection intersection) {
-    //TODO: check if primitive contains texture
     int textureX, textureY;
     Texture& objectTexture = intersectedPrimitive->material.texture;
     LightIntensity textureColor(1, 1, 1);

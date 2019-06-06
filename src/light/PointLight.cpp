@@ -14,10 +14,6 @@ LightIntensity PointLight::calculateLightIntensity(std::list<std::shared_ptr<Pri
                                                    Vector3 cameraPosition,
                                                    std::shared_ptr<Primitive> intersectedPrimitive,
                                                    Intersection intersection) {
-    if (!isAccessible(intersection.position, scenePrimitives)) {
-        return LightIntensity(0, 0, 0);
-    }
-
     LightIntensity kA = intersectedPrimitive.get()->getAmbient();
     LightIntensity kD = intersectedPrimitive.get()->getDiffuse();
     LightIntensity kS = intersectedPrimitive.get()->getSpecular();
@@ -26,6 +22,12 @@ LightIntensity PointLight::calculateLightIntensity(std::list<std::shared_ptr<Pri
     LightIntensity iA = this->ambientIntensity;
     LightIntensity iD = this->diffuseIntensity;
     LightIntensity iS = this->specularIntensity;
+
+    LightIntensity ambientLight = kA * iA;
+
+    if (!isAccessible(intersection.position, scenePrimitives)) {
+        return ambientLight;
+    }
 
     // direction vector from the point on the surface toward light source
     Vector3 L = (this->position - intersection.position).normalized();
@@ -42,18 +44,21 @@ LightIntensity PointLight::calculateLightIntensity(std::list<std::shared_ptr<Pri
     //TODO: move ambient light so it will calculate once for all light sources
 
     //Phong equation
-    LightIntensity I = kA * iA + (kD * iD * (L.dot(N)) + kS * iS * pow(R.dot(V), alpha));
-//    double distance = (this->position - intersectionPoint).getMagnitude() / 100.0;
-//    LightIntensity attenuatedI = LightIntensity(I.r / distance, I.g / distance, I.b / distance);
+    LightIntensity I = ambientLight + (kD * iD * (L.dot(N)) + kS * iS * pow(R.dot(V), alpha));
     return I;
 }
 
 bool PointLight::isAccessible(Vector3 reflectionPoint, std::list<std::shared_ptr<Primitive>> scenePrimitives) {
     Ray primitiveToLight(reflectionPoint, this->position);
-    std::vector<Vector3> intersections;
     for (const auto &primitive : scenePrimitives) {
-        if (!primitive.get()->intersect(primitiveToLight).empty()) {
-            return false;
+        std::vector<Intersection> intersections = primitive.get()->intersect(primitiveToLight);
+//        if (!intersections.empty()) {
+//            return false;
+//        }
+        for (const auto &intersection : intersections) {
+            if ((reflectionPoint - intersection.position).getMagnitude() < (reflectionPoint - this->position).getMagnitude()) {
+                return false;
+            }
         }
     }
     return true;

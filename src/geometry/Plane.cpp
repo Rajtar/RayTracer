@@ -30,8 +30,8 @@ void Plane::getTexelCoordinates(const Vector3 &intersection, const int textureWi
     Vector3 uAxis(this->normal.y, this->normal.z, -this->normal.x);
     Vector3 vAxis = uAxis.cross(this->normal);
 
-    double u = fabs(intersection.normalized().dot(uAxis) * 1);
-    double v = fabs(intersection.normalized().dot(vAxis) * 1);
+    double u = fabs(intersection.normalized().dot(uAxis) * 1.0);
+    double v = fabs(intersection.normalized().dot(vAxis) * 1.0);
 
     column = (int) (textureWidth - 1) * u;
     row = (int) (textureHeight - 1) * v;

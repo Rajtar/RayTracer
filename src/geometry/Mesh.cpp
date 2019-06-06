@@ -20,3 +20,8 @@ std::vector<Intersection> Mesh::intersect(const Ray &ray) const {
 
     return meshIntersections;
 }
+
+void Mesh::getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight, int &row,
+                               int &column) const {
+    //TODO
+}
