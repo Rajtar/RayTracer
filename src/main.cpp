@@ -33,6 +33,7 @@ int main() {
     Material yellow(LightIntensity(1, 1, 0), LightIntensity(1, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material white(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material green(LightIntensity(0, 1, 0), LightIntensity(0, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
+    Material reflective(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9, Reflective);
     Material colorful(colorfulTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material checker(checkerTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
 
@@ -42,7 +43,8 @@ int main() {
     std::shared_ptr<Plane> backWall(new Plane(Vector3(0, 0, 40), Vector3(0, 0, -1), white));
     std::shared_ptr<Plane> rightWall(new Plane(Vector3(15, 0, 0), Vector3(-1, 0, 0), green));
     std::shared_ptr<Plane> leftWall(new Plane(Vector3(-15, 0, 0), Vector3(1, 0, 0), red));
-    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(0, -2, 30), 3, colorful));
+    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(6, -2, 30), 3, yellow));
+    std::shared_ptr<Sphere> sphere2(new Sphere(Vector3(-6, -2, 30), 3, reflective));
 
 //    loader.loadMesh("../models/dodecahedron.obj", mesh, true, Vector3(0, -2, 15));
 
@@ -52,6 +54,7 @@ int main() {
 
     Scene scene;
     scene.addPrimitive(sphere1);
+    scene.addPrimitive(sphere2);
     scene.addPrimitive(floor);
     scene.addPrimitive(roof);
     scene.addPrimitive(rightWall);

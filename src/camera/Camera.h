@@ -27,6 +27,7 @@ private:
     LightIntensity calculatePixelColor(Scene scene,
                                        std::shared_ptr<Primitive> intersectedPrimitive,
                                        Intersection intersection);
+    LightIntensity calculateReflectivePixelColor(Ray ray, Intersection intersection, const Scene &scene, int maxBounces);
     void printProgress(float now, float total);
 };
 

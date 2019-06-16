@@ -44,10 +44,17 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
                 std::vector<Intersection> intersections = primitive->intersect(ray);
                 if (!intersections.empty()) {
                     intersected = true;
-                    double intersectionDepth = (position - intersections.front().position).getMagnitude();
+                    Intersection currentIntersection = intersections.front();
+                    double intersectionDepth = (position - currentIntersection.position).getMagnitude();
                     if(intersectionDepth < lowestPixelDepth) {
                         lowestPixelDepth = intersectionDepth;
-                        pixelColor = calculatePixelColor(scene, primitive, intersections.front());
+
+                        if(primitive->material.type == Reflective){
+                            pixelColor = calculateReflectivePixelColor(ray, currentIntersection, scene, 3);
+                        }
+                        else {
+                            pixelColor = calculatePixelColor(scene, primitive, currentIntersection);
+                        }
                     }
                 }
             }
@@ -128,22 +135,59 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
 LightIntensity Camera::calculatePixelColor(Scene scene,
                                            std::shared_ptr<Primitive> intersectedPrimitive,
                                            Intersection intersection) {
-    int textureX, textureY;
-    Texture& objectTexture = intersectedPrimitive->material.texture;
-    LightIntensity textureColor(1, 1, 1);
+        int textureX, textureY;
+        Texture &objectTexture = intersectedPrimitive->material.texture;
+        LightIntensity textureColor(1, 1, 1);
 
-    if (!objectTexture.isEmpty()) {
-        intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(), objectTexture.getHeight(), textureX, textureY);
-        textureColor = objectTexture.getColorAt(textureX, textureY);
+        if (!objectTexture.isEmpty()) {
+            intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(),
+                                                      objectTexture.getHeight(), textureX, textureY);
+            textureColor = objectTexture.getColorAt(textureX, textureY);
+        }
+
+        scene.primitives.remove(intersectedPrimitive);
+        LightIntensity cumulativeIntensity;
+        for (const auto &light : scene.lights) {
+            cumulativeIntensity += light.get()->calculateLightIntensity(scene.primitives, this->position,
+                                                                        intersectedPrimitive,
+                                                                        intersection);
+        }
+        return cumulativeIntensity * textureColor;
+}
+
+LightIntensity Camera::calculateReflectivePixelColor(Ray ray, Intersection intersection, const Scene &scene, int maxBounces) {
+    LightIntensity pixelColor = LightIntensity(1, 1, 1);
+    int i = 0;
+    bool bounceAllowed = true;
+
+    while(i < maxBounces && bounceAllowed) {
+        Vector3 bounceDirection = ray.direction - (2 * ray.direction.dot(intersection.normal) * intersection.normal);
+        ray = Ray(intersection.position, intersection.position + bounceDirection);
+        double lowestPixelDepth = std::numeric_limits<double>::max();
+
+        for (const auto &primitive : scene.primitives) {
+            std::vector<Intersection> intersections = primitive->intersect(ray);
+            if (!intersections.empty()) {
+                Intersection currentIntersection = intersections.front();
+                double intersectionDepth = (intersection.position - currentIntersection.position).getMagnitude();
+                if(intersectionDepth < lowestPixelDepth) {
+                    lowestPixelDepth = intersectionDepth;
+                    intersection = currentIntersection;
+
+                    if(primitive->material.type == Reflective){
+                        bounceAllowed = true;
+                    }
+                    else {
+                        bounceAllowed = false;
+                    }
+                    pixelColor = calculatePixelColor(scene, primitive, currentIntersection);
+                }
+            }
+        }
+        i++;
     }
 
-    scene.primitives.remove(intersectedPrimitive);
-    LightIntensity cumulativeIntensity;
-    for (const auto &light : scene.lights) {
-        cumulativeIntensity += light.get()->calculateLightIntensity(scene.primitives, this->position, intersectedPrimitive,
-                                                    intersection);
-    }
-    return cumulativeIntensity * textureColor;
+    return pixelColor;
 }
 
 void Camera::printProgress(float now, float total) {
