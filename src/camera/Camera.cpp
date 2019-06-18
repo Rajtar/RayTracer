@@ -155,7 +155,6 @@ LightIntensity Camera::calculatePixelColor(Scene scene,
 //            textureColor = objectTexture.getColorAt(textureX, textureY);
 //        }
 
-        scene.primitives.remove(intersectedPrimitive);
         LightIntensity cumulativeIntensity;
         for (const auto &light : scene.lights) {
             cumulativeIntensity += light.get()->calculateLightIntensity(scene.primitives, this->position,
@@ -173,42 +172,37 @@ Camera::calculateRecursivePixelColor(Ray ray, Intersection intersection,
     int i = 0;
     bool bounceAllowed = true;
     std::shared_ptr<Primitive> lastHitPrimitive;
-    scene.primitives.remove(intersectedPrimitive);
-    Intersection intersection1;
+    Intersection lastIntersection;
 
     while(bounceAllowed && i < maxBounces) {
-        Vector3 direction;
+        Vector3 bounceDirection;
         if(intersectedPrimitive->material.type == Reflective) {
-            direction = getReflectionVector(ray, intersection);
+            bounceDirection = getReflectionVector(ray, intersection);
         } else if(intersectedPrimitive->material.type == Refractive) {
-            direction = getTransmissionVector(ray, intersection, intersectedPrimitive->material.refractiveIndex);
+            bounceDirection = getTransmissionVector(ray, intersection, intersectedPrimitive->material.refractiveIndex);
         }
-        ray = Ray(intersection.position, intersection.position + direction);
+        ray = Ray(intersection.position, intersection.position + bounceDirection);
         double lowestPixelDepth = std::numeric_limits<double>::max();
 
         for (const auto &primitive : scene.primitives) {
+            if(primitive->compareUUID(*intersectedPrimitive)) {
+                continue;
+            }
             std::vector<Intersection> intersections = primitive->intersect(ray);
             if (!intersections.empty()) {
                 Intersection currentIntersection = intersections.front();
                 double intersectionDepth = (intersection.position - currentIntersection.position).getMagnitude();
                 if(intersectionDepth < lowestPixelDepth) {
                     lowestPixelDepth = intersectionDepth;
-                    intersection1 = currentIntersection;
+                    lastIntersection = currentIntersection;
                     lastHitPrimitive = primitive;
-
-                    if(primitive->material.type == Reflective){
-                        bounceAllowed = true;
-                    }
-                    else {
-                        bounceAllowed = false;
-                    }
+                    bounceAllowed = primitive->material.type == Reflective || primitive->material.type == Refractive;
                 }
             }
         }
         i++;
-        intersection = intersection1;
+        intersection = lastIntersection;
     }
-    scene.addPrimitive(intersectedPrimitive);
     if(lastHitPrimitive != nullptr) {
         pixelColor = calculatePixelColor(scene, lastHitPrimitive, intersection);
     }

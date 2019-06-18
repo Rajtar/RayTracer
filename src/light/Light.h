@@ -31,7 +31,8 @@ public:
     /// \param scenePrimitives list of primitives in scene
     /// \return false if there are other objects in the way of ray.
     /// true if there are none
-    virtual bool isAccessible(Vector3 reflectionPoint, std::list<std::shared_ptr<Primitive>> scenePrimitives) = 0;
+    virtual bool isAccessible(Vector3 reflectionPoint, std::shared_ptr<Primitive> intersectedPrimitive,
+                              std::list<std::shared_ptr<Primitive>> scenePrimitives) = 0;
 };
 
 

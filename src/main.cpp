@@ -18,8 +18,8 @@ const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 1000,
-                       height = 1000;
+    const unsigned int width = 500,
+                       height = 500;
 
     OBJLoader loader;
 

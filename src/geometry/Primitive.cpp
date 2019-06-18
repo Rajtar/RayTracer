@@ -26,10 +26,6 @@ const std::string &Primitive::getUUID() const {
     return UUID;
 }
 
-bool operator==(const Primitive &lhs, const Primitive &rhs) {
-    return lhs.getUUID() == rhs.getUUID();
-}
-
-bool operator!=(const Primitive &lhs, const Primitive &rhs) {
-    return !(lhs.getUUID() == rhs.getUUID());
+bool Primitive::compareUUID(const Primitive &other) const {
+    return this->getUUID() == other.getUUID();
 }

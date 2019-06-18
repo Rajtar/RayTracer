@@ -26,8 +26,9 @@ public:
     LightIntensity getAmbient() const;
     LightIntensity getSpecular() const;
     double getSmoothness() const;
+    bool compareUUID(const Primitive &other) const;
 
-//private:
+private:
     std::string UUID;
 };
 
