@@ -11,7 +11,7 @@ class Primitive {
 public:
     Material material;
 
-    Primitive() = default;
+    Primitive();
 
     explicit Primitive(Material material);
 
@@ -20,13 +20,15 @@ public:
     virtual void getTexelCoordinates(const Vector3 &intersection, const int textureWidth, const int textureHeight,
                                      int &row, int &column) const = 0;
 
+    const std::string &getUUID() const;
+
     LightIntensity getDiffuse() const;
-
     LightIntensity getAmbient() const;
-
     LightIntensity getSpecular() const;
-
     double getSmoothness() const;
+
+//private:
+    std::string UUID;
 };
 
 #endif //RENDERER_PRIMITIVE_H

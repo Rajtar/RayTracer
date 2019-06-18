@@ -1,7 +1,10 @@
 #include "Primitive.h"
 #include "../light/LightIntensity.h"
+#include "../UUIDGenerator.h"
 
-Primitive::Primitive(Material material) : material(material) {}
+Primitive::Primitive() {UUID = UUIDGenerator::generateUUID();}
+
+Primitive::Primitive(Material material) : material(material) {UUID = UUIDGenerator::generateUUID();}
 
 LightIntensity Primitive::getDiffuse() const {
     return material.diffuse;
@@ -17,4 +20,16 @@ LightIntensity Primitive::getSpecular() const {
 
 double Primitive::getSmoothness() const {
     return material.smoothness;
+}
+
+const std::string &Primitive::getUUID() const {
+    return UUID;
+}
+
+bool operator==(const Primitive &lhs, const Primitive &rhs) {
+    return lhs.getUUID() == rhs.getUUID();
+}
+
+bool operator!=(const Primitive &lhs, const Primitive &rhs) {
+    return !(lhs.getUUID() == rhs.getUUID());
 }

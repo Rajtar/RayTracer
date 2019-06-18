@@ -28,9 +28,12 @@ private:
                                        std::shared_ptr<Primitive> intersectedPrimitive,
                                        Intersection intersection);
     LightIntensity
-    calculateReflectivePixelColor(Ray ray, Intersection intersection, std::shared_ptr<Primitive> intersectedPrimitive,
-                                  Scene scene, int maxBounces);
+    calculateRecursivePixelColor(Ray ray, Intersection intersection, std::shared_ptr<Primitive> intersectedPrimitive,
+                                 Scene scene, int maxBounces);
     void printProgress(float now, float total);
+
+    Vector3 getReflectionVector(const Ray &ray, const Intersection &intersection) const;
+    Vector3 getTransmissionVector(const Ray &ray, const Intersection &intersection, float targetRefractiveIndex) const;
 };
 
 

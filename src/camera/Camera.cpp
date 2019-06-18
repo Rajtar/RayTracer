@@ -49,10 +49,10 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
                     if(intersectionDepth < lowestPixelDepth) {
                         lowestPixelDepth = intersectionDepth;
 
-                        if(primitive->material.type == Reflective){
+                        if(primitive->material.type == Reflective || primitive->material.type == Refractive ){
 
-                            pixelColor = calculateReflectivePixelColor(ray, currentIntersection,
-                                                                       primitive, scene, 3);
+                            pixelColor = calculateRecursivePixelColor(ray, currentIntersection,
+                                                                      primitive, scene, 3);
                         }
                         else {
                             pixelColor = calculatePixelColor(scene, primitive, currentIntersection);
@@ -119,9 +119,9 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
                         if (intersectionDepth < lowestPixelDepth) {
                             lowestPixelDepth = intersectionDepth;
                             LightIntensity calculatedColor;
-                            if(primitive->material.type == Reflective){
-                                calculatedColor = calculateReflectivePixelColor(ray, intersections.front(),
-                                                                                primitive, scene, 3);
+                            if(primitive->material.type != Default){
+                                calculatedColor = calculateRecursivePixelColor(ray, intersections.front(),
+                                                                               primitive, scene, 3);
                             }
                             else {
                                 calculatedColor = calculatePixelColor(scene, primitive, intersections.front());
@@ -166,9 +166,9 @@ LightIntensity Camera::calculatePixelColor(Scene scene,
 }
 
 LightIntensity
-Camera::calculateReflectivePixelColor(Ray ray, Intersection intersection,
-                                      std::shared_ptr<Primitive> intersectedPrimitive,
-                                      Scene scene, int maxBounces) {
+Camera::calculateRecursivePixelColor(Ray ray, Intersection intersection,
+                                     std::shared_ptr<Primitive> intersectedPrimitive,
+                                     Scene scene, int maxBounces) {
     LightIntensity pixelColor = LightIntensity(0, 0, 1);
     int i = 0;
     bool bounceAllowed = true;
@@ -177,8 +177,13 @@ Camera::calculateReflectivePixelColor(Ray ray, Intersection intersection,
     Intersection intersection1;
 
     while(bounceAllowed && i < maxBounces) {
-        Vector3 bounceDirection = ray.direction - (2 * ray.direction.dot(intersection.normal) * intersection.normal);
-        ray = Ray(intersection.position, intersection.position + bounceDirection);
+        Vector3 direction;
+        if(intersectedPrimitive->material.type == Reflective) {
+            direction = getReflectionVector(ray, intersection);
+        } else if(intersectedPrimitive->material.type == Refractive) {
+            direction = getTransmissionVector(ray, intersection, intersectedPrimitive->material.refractiveIndex);
+        }
+        ray = Ray(intersection.position, intersection.position + direction);
         double lowestPixelDepth = std::numeric_limits<double>::max();
 
         for (const auto &primitive : scene.primitives) {
@@ -205,13 +210,38 @@ Camera::calculateReflectivePixelColor(Ray ray, Intersection intersection,
     }
     scene.addPrimitive(intersectedPrimitive);
     if(lastHitPrimitive != nullptr) {
-        if(intersection.position.y < -10)
-        {
-            int dupaaaa = 1337;
-        }
         pixelColor = calculatePixelColor(scene, lastHitPrimitive, intersection);
     }
     return pixelColor;
+}
+
+Vector3 Camera::getReflectionVector(const Ray &ray, const Intersection &intersection) const {
+    Vector3 bounceDirection = ray.direction - (2 * ray.direction.dot(intersection.normal) * intersection.normal);
+    return bounceDirection;
+}
+
+Vector3
+Camera::getTransmissionVector(const Ray &ray, const Intersection &intersection, float targetRefractiveIndex) const {
+    float cosI = ray.direction.dot(intersection.normal);
+    cosI = std::min(cosI, 1.0f);
+    cosI = std::max(cosI, -1.0f);
+
+    float originRefractiveIndex = 1;
+    Vector3 normal = intersection.normal;
+
+    if(cosI < 0)
+    {
+        cosI = -cosI;
+    }
+    else
+    {
+        std::swap(originRefractiveIndex, targetRefractiveIndex);
+        normal = -intersection.normal;
+    }
+
+    float eta = originRefractiveIndex / targetRefractiveIndex;
+    float k = 1 - eta * eta * (1 - cosI * cosI);
+    return k < 0 ? 0 : eta * ray.direction + (eta * cosI - sqrtf(k)) * normal;
 }
 
 void Camera::printProgress(float now, float total) {
@@ -221,3 +251,5 @@ void Camera::printProgress(float now, float total) {
         std::cout.flush();
     }
 }
+
+

@@ -7,7 +7,7 @@
 enum MaterialTypes {
     Default = 0,
     Reflective = 1,
-    Glossy = 2
+    Refractive = 2
 };
 
 class Material {
@@ -16,12 +16,13 @@ public:
     MaterialTypes type = Default;
     LightIntensity diffuse, ambient, specular;
     double smoothness;
+    double refractiveIndex = 1;
 
     Material() = default;
     Material(const LightIntensity &diffuse, const LightIntensity &ambient, const LightIntensity &specular,
-             double smoothness, MaterialTypes type = Default);
+             double smoothness, double refractiveIndex = 1, MaterialTypes type = Default);
     Material(const Texture &texture, const LightIntensity &diffuse, const LightIntensity &ambient,
-             const LightIntensity &specular, double smoothness, MaterialTypes type = Default);
+             const LightIntensity &specular, double smoothness, double refractiveIndex = 1, MaterialTypes type = Default);
 };
 
 

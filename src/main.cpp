@@ -11,14 +11,15 @@
 #include "geometry/Plane.h"
 #include "light/PointLight.h"
 #include "light/Texture.h"
+#include "UUIDGenerator.h"
 #include <chrono>
 
 const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 250,
-                       height = 250;
+    const unsigned int width = 1000,
+                       height = 1000;
 
     OBJLoader loader;
 
@@ -30,10 +31,11 @@ int main() {
 
     Material red(LightIntensity(1, 0, 0), LightIntensity(1, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material blue(LightIntensity(0, 0, 1), LightIntensity(0, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
-    Material yellow(LightIntensity(1, 1, 0), LightIntensity(1, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
+    Material yellow(LightIntensity(1, 1, 0), LightIntensity(1, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9, Reflective);
     Material white(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material green(LightIntensity(0, 1, 0), LightIntensity(0, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
-    Material reflective(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9, Reflective);
+    Material reflective(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9, 1.5, Reflective);
+    Material refractive(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9, 1.5, Refractive);
     Material colorful(colorfulTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material checker(checkerTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
 
@@ -43,8 +45,8 @@ int main() {
     std::shared_ptr<Plane> backWall(new Plane(Vector3(0, 0, 40), Vector3(0, 0, -1), white));
     std::shared_ptr<Plane> rightWall(new Plane(Vector3(15, 0, 0), Vector3(-1, 0, 0), green));
     std::shared_ptr<Plane> leftWall(new Plane(Vector3(-15, 0, 0), Vector3(1, 0, 0), red));
-    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(6, -2, 30), 3, yellow));
-    std::shared_ptr<Sphere> sphere2(new Sphere(Vector3(-3, -2, 15), 5, reflective));
+    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(6, -2, 30), 5, reflective));
+    std::shared_ptr<Sphere> sphere2(new Sphere(Vector3(-6, -2, 25), 6, refractive));
 
 //    loader.loadMesh("../models/dodecahedron.obj", mesh, true, Vector3(0, -2, 15));
 
