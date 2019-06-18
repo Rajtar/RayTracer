@@ -25,9 +25,16 @@ LightIntensity PointLight::calculateLightIntensity(std::list<std::shared_ptr<Pri
 
     LightIntensity ambientLight = kA * iA;
 
+    if(!isAccessible(intersection.position, scenePrimitives) && (int) kD.r == 1 && (int) kD.g == 0 && (int) kD.b == 0) {
+//        return LightIntensity(0, 0, 1);
+        int i = 3;
+    }
+
     if (!isAccessible(intersection.position, scenePrimitives)) {
         return ambientLight;
     }
+
+
 
     // direction vector from the point on the surface toward light source
     Vector3 L = (this->position - intersection.position).normalized();
@@ -52,11 +59,11 @@ bool PointLight::isAccessible(Vector3 reflectionPoint, std::list<std::shared_ptr
     Ray primitiveToLight(reflectionPoint, this->position);
     for (const auto &primitive : scenePrimitives) {
         std::vector<Intersection> intersections = primitive.get()->intersect(primitiveToLight);
-//        if (!intersections.empty()) {
-//            return false;
-//        }
+
         for (const auto &intersection : intersections) {
-            if ((reflectionPoint - intersection.position).getMagnitude() < (reflectionPoint - this->position).getMagnitude()) {
+            double toReflection = (reflectionPoint - intersection.position).getMagnitude();
+            double toLight = (reflectionPoint - this->position).getMagnitude();
+            if (toReflection < toLight) {
                 return false;
             }
         }

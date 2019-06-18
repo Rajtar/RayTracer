@@ -50,7 +50,9 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
                         lowestPixelDepth = intersectionDepth;
 
                         if(primitive->material.type == Reflective){
-                            pixelColor = calculateReflectivePixelColor(ray, currentIntersection, scene, 3);
+
+                            pixelColor = calculateReflectivePixelColor(ray, currentIntersection,
+                                                                       primitive, scene, 3);
                         }
                         else {
                             pixelColor = calculatePixelColor(scene, primitive, currentIntersection);
@@ -116,7 +118,15 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
                         double intersectionDepth = (position - intersections.front().position).getMagnitude();
                         if (intersectionDepth < lowestPixelDepth) {
                             lowestPixelDepth = intersectionDepth;
-                            LightIntensity calculatedColor = calculatePixelColor(scene, primitive, intersections.front());
+                            LightIntensity calculatedColor;
+                            if(primitive->material.type == Reflective){
+                                calculatedColor = calculateReflectivePixelColor(ray, intersections.front(),
+                                                                                primitive, scene, 3);
+                            }
+                            else {
+                                calculatedColor = calculatePixelColor(scene, primitive, intersections.front());
+                            }
+//                            LightIntensity calculatedColor = calculatePixelColor(scene, primitive, intersections.front());
                             colorToAdd = Vector3(calculatedColor.r, calculatedColor.g, calculatedColor.b);
                         }
                     }
@@ -135,15 +145,15 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
 LightIntensity Camera::calculatePixelColor(Scene scene,
                                            std::shared_ptr<Primitive> intersectedPrimitive,
                                            Intersection intersection) {
-        int textureX, textureY;
-        Texture &objectTexture = intersectedPrimitive->material.texture;
-        LightIntensity textureColor(1, 1, 1);
-
-        if (!objectTexture.isEmpty()) {
-            intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(),
-                                                      objectTexture.getHeight(), textureX, textureY);
-            textureColor = objectTexture.getColorAt(textureX, textureY);
-        }
+//        int textureX, textureY;
+//        Texture &objectTexture = intersectedPrimitive->material.texture;
+//        LightIntensity textureColor(1, 1, 1);
+//
+//        if (!objectTexture.isEmpty()) {
+//            intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(),
+//                                                      objectTexture.getHeight(), textureX, textureY);
+//            textureColor = objectTexture.getColorAt(textureX, textureY);
+//        }
 
         scene.primitives.remove(intersectedPrimitive);
         LightIntensity cumulativeIntensity;
@@ -152,15 +162,21 @@ LightIntensity Camera::calculatePixelColor(Scene scene,
                                                                         intersectedPrimitive,
                                                                         intersection);
         }
-        return cumulativeIntensity * textureColor;
+        return cumulativeIntensity; //;* textureColor;
 }
 
-LightIntensity Camera::calculateReflectivePixelColor(Ray ray, Intersection intersection, const Scene &scene, int maxBounces) {
-    LightIntensity pixelColor = LightIntensity(1, 1, 1);
+LightIntensity
+Camera::calculateReflectivePixelColor(Ray ray, Intersection intersection,
+                                      std::shared_ptr<Primitive> intersectedPrimitive,
+                                      Scene scene, int maxBounces) {
+    LightIntensity pixelColor = LightIntensity(0, 0, 1);
     int i = 0;
     bool bounceAllowed = true;
+    std::shared_ptr<Primitive> lastHitPrimitive;
+    scene.primitives.remove(intersectedPrimitive);
+    Intersection intersection1;
 
-    while(i < maxBounces && bounceAllowed) {
+    while(bounceAllowed && i < maxBounces) {
         Vector3 bounceDirection = ray.direction - (2 * ray.direction.dot(intersection.normal) * intersection.normal);
         ray = Ray(intersection.position, intersection.position + bounceDirection);
         double lowestPixelDepth = std::numeric_limits<double>::max();
@@ -172,7 +188,8 @@ LightIntensity Camera::calculateReflectivePixelColor(Ray ray, Intersection inter
                 double intersectionDepth = (intersection.position - currentIntersection.position).getMagnitude();
                 if(intersectionDepth < lowestPixelDepth) {
                     lowestPixelDepth = intersectionDepth;
-                    intersection = currentIntersection;
+                    intersection1 = currentIntersection;
+                    lastHitPrimitive = primitive;
 
                     if(primitive->material.type == Reflective){
                         bounceAllowed = true;
@@ -180,13 +197,20 @@ LightIntensity Camera::calculateReflectivePixelColor(Ray ray, Intersection inter
                     else {
                         bounceAllowed = false;
                     }
-                    pixelColor = calculatePixelColor(scene, primitive, currentIntersection);
                 }
             }
         }
         i++;
+        intersection = intersection1;
     }
-
+    scene.addPrimitive(intersectedPrimitive);
+    if(lastHitPrimitive != nullptr) {
+        if(intersection.position.y < -10)
+        {
+            int dupaaaa = 1337;
+        }
+        pixelColor = calculatePixelColor(scene, lastHitPrimitive, intersection);
+    }
     return pixelColor;
 }
 

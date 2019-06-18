@@ -9,6 +9,7 @@ public:
     Vector3 position;
     Vector3 normal;
 
+    Intersection() = default;
     Intersection(const Vector3 &position, const Vector3 &normal);
 };
 

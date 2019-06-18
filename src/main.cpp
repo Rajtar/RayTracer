@@ -17,8 +17,8 @@ const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 1000,
-                       height = 1000;
+    const unsigned int width = 250,
+                       height = 250;
 
     OBJLoader loader;
 
@@ -44,12 +44,12 @@ int main() {
     std::shared_ptr<Plane> rightWall(new Plane(Vector3(15, 0, 0), Vector3(-1, 0, 0), green));
     std::shared_ptr<Plane> leftWall(new Plane(Vector3(-15, 0, 0), Vector3(1, 0, 0), red));
     std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(6, -2, 30), 3, yellow));
-    std::shared_ptr<Sphere> sphere2(new Sphere(Vector3(-6, -2, 30), 3, reflective));
+    std::shared_ptr<Sphere> sphere2(new Sphere(Vector3(-3, -2, 15), 5, reflective));
 
 //    loader.loadMesh("../models/dodecahedron.obj", mesh, true, Vector3(0, -2, 15));
 
     std::shared_ptr<PointLight> whiteLight(
-            new PointLight(LightIntensity(0.8, 0.8, 0.4), LightIntensity(0.3, 0.3, 0.3), LightIntensity(0.5, 0.5, 0.5),
+            new PointLight(LightIntensity(0.4, 0.4, 0.4), LightIntensity(0.3, 0.3, 0.3), LightIntensity(0.8, 0.8, 0.8),
                            Vector3(0, 9, 30)));
 
     Scene scene;
