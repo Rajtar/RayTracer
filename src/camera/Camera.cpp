@@ -126,7 +126,6 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
                             else {
                                 calculatedColor = calculatePixelColor(scene, primitive, intersections.front());
                             }
-//                            LightIntensity calculatedColor = calculatePixelColor(scene, primitive, intersections.front());
                             colorToAdd = Vector3(calculatedColor.r, calculatedColor.g, calculatedColor.b);
                         }
                     }
@@ -142,7 +141,7 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
     }
 }
 
-LightIntensity Camera::calculatePixelColor(Scene scene,
+LightIntensity Camera::calculatePixelColor(const Scene &scene,
                                            std::shared_ptr<Primitive> intersectedPrimitive,
                                            Intersection intersection) {
 //        int textureX, textureY;
@@ -167,7 +166,7 @@ LightIntensity Camera::calculatePixelColor(Scene scene,
 LightIntensity
 Camera::calculateRecursivePixelColor(Ray ray, Intersection intersection,
                                      std::shared_ptr<Primitive> intersectedPrimitive,
-                                     Scene scene, int maxBounces) {
+                                     const Scene &scene, int maxBounces) {
     LightIntensity pixelColor = LightIntensity(0, 0, 1);
     int i = 0;
     bool bounceAllowed = true;

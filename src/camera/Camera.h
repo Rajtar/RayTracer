@@ -24,12 +24,12 @@ public:
 private:
     virtual void renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
     virtual void renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
-    LightIntensity calculatePixelColor(Scene scene,
+    LightIntensity calculatePixelColor(const Scene &scene,
                                        std::shared_ptr<Primitive> intersectedPrimitive,
                                        Intersection intersection);
     LightIntensity
     calculateRecursivePixelColor(Ray ray, Intersection intersection, std::shared_ptr<Primitive> intersectedPrimitive,
-                                 Scene scene, int maxBounces);
+                                 const Scene &scene, int maxBounces);
     void printProgress(float now, float total);
 
     Vector3 getReflectionVector(const Ray &ray, const Intersection &intersection) const;
