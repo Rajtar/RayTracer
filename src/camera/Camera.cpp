@@ -52,7 +52,7 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
                         if(primitive->material.type == Reflective || primitive->material.type == Refractive ){
 
                             pixelColor = calculateRecursivePixelColor(ray, currentIntersection,
-                                                                      primitive, scene, 3);
+                                                                      primitive, scene, 10);
                         }
                         else {
                             pixelColor = calculatePixelColor(scene, primitive, currentIntersection);
@@ -184,12 +184,18 @@ Camera::calculateRecursivePixelColor(Ray ray, Intersection intersection,
         double lowestPixelDepth = std::numeric_limits<double>::max();
 
         for (const auto &primitive : scene.primitives) {
-            if(primitive->compareUUID(*intersectedPrimitive)) {
+            if(primitive->compareUUID(*intersectedPrimitive) && primitive->material.type != Refractive) {
                 continue;
             }
             std::vector<Intersection> intersections = primitive->intersect(ray);
             if (!intersections.empty()) {
-                Intersection currentIntersection = intersections.front();
+                Intersection currentIntersection = primitive->material.type == Refractive ? intersections.back() : intersections.front();
+
+                float intersectionDistance = (intersection.position - currentIntersection.position).getMagnitude();
+                if (fabs(intersectionDistance) < 0.1) {
+                    continue;
+                }
+
                 double intersectionDepth = (intersection.position - currentIntersection.position).getMagnitude();
                 if(intersectionDepth < lowestPixelDepth) {
                     lowestPixelDepth = intersectionDepth;
