@@ -45,8 +45,8 @@ int main() {
     std::shared_ptr<Plane> backWall(new Plane(Vector3(0, 0, 40), Vector3(0, 0, -1), white));
     std::shared_ptr<Plane> rightWall(new Plane(Vector3(15, 0, 0), Vector3(-1, 0, 0), green));
     std::shared_ptr<Plane> leftWall(new Plane(Vector3(-15, 0, 0), Vector3(1, 0, 0), red));
-    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(6, -2, 30), 5, reflective));
-    std::shared_ptr<Sphere> sphere2(new Sphere(Vector3(-6, -2, 25), 6, refractive));
+    std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(6, -2, 32), 5, refractive));
+    std::shared_ptr<Sphere> sphere2(new Sphere(Vector3(-2, -2, 20), 5, reflective));
 
 //    loader.loadMesh("../models/dodecahedron.obj", mesh, true, Vector3(0, -2, 15));
 
