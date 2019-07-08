@@ -18,8 +18,8 @@ const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 500,
-                       height = 500;
+    const unsigned int width = 2000,
+                       height = 2000;
 
     OBJLoader loader;
 
@@ -35,7 +35,7 @@ int main() {
     Material white(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material green(LightIntensity(0, 1, 0), LightIntensity(0, 1, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material reflective(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9, 1.5, Reflective);
-    Material refractive(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9, 2.5, Refractive);
+    Material refractive(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9, 4, Refractive);
     Material colorful(colorfulTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material checker(checkerTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
 
