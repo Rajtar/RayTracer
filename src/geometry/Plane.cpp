@@ -3,7 +3,7 @@
 #include "Plane.h"
 #include "Intersection.h"
 
-Plane::Plane(const Vector3 &point, const Vector3 &normal, Material material) : Primitive(material), point(point) {
+Plane::Plane(const Vector3 &point, const Vector3 &normal, const Material &material) : Primitive(material), point(point), normal(normal) {
     this->normal = normal.normalized();
 }
 

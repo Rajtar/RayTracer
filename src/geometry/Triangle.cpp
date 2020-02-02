@@ -4,17 +4,17 @@
 
 #define MINUS_ZERO -0.0001
 
-Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Vector3 &normal, Material material) : Primitive(material),
-                                                                                                                     a(a),
-                                                                                                                     b(b),
-                                                                                                                     c(c),
-                                                                                                                     normal(normal) {}
+Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Vector3 &normal, const Material &material) : Primitive(material),
+                                                                                                                            a(a),
+                                                                                                                            b(b),
+                                                                                                                            c(c),
+                                                                                                                            normal(normal) {}
 
-Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, Material material) : Primitive(material),
-                                                                                                a(a),
-                                                                                                b(b),
-                                                                                                c(c) {
-    this->normal = (b - a).cross(c - a).normalized();
+Triangle::Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Material &material) : Primitive(material),
+                                                                                                     a(a),
+                                                                                                     b(b),
+                                                                                                     c(c),
+                                                                                                     normal((b - a).cross(c - a).normalized()){
 }
 
 std::vector<Intersection> Triangle::intersect(const Ray &ray) const {

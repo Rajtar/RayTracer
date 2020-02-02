@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "Mesh.h"
 
-Mesh::Mesh(Material material) : Primitive(material) {}
+Mesh::Mesh(const Material &material) : Primitive(material) {}
 
 std::vector<Intersection> Mesh::intersect(const Ray &ray) const {
     std::vector<Intersection> meshIntersections;

@@ -10,14 +10,14 @@ PointLight::PointLight(const LightIntensity &diffuseIntensity, const LightIntens
                                                                                                  specularIntensity),
                                                                                            position(position) {}
 
-LightIntensity PointLight::calculateLightIntensity(std::list<std::shared_ptr<Primitive>> scenePrimitives,
+LightIntensity PointLight::calculateLightIntensity(std::vector<std::shared_ptr<Primitive>> scenePrimitives,
                                                    Vector3 cameraPosition,
-                                                   std::shared_ptr<Primitive> intersectedPrimitive,
+                                                   const Primitive &intersectedPrimitive,
                                                    Intersection intersection) {
-    LightIntensity kA = intersectedPrimitive.get()->getAmbient();
-    LightIntensity kD = intersectedPrimitive.get()->getDiffuse();
-    LightIntensity kS = intersectedPrimitive.get()->getSpecular();
-    double alpha = intersectedPrimitive.get()->getSmoothness();
+    LightIntensity kA = intersectedPrimitive.getAmbient();
+    LightIntensity kD = intersectedPrimitive.getDiffuse();
+    LightIntensity kS = intersectedPrimitive.getSpecular();
+    double alpha = intersectedPrimitive.getSmoothness();
 
     LightIntensity iA = this->ambientIntensity;
     LightIntensity iD = this->diffuseIntensity;
@@ -48,11 +48,11 @@ LightIntensity PointLight::calculateLightIntensity(std::list<std::shared_ptr<Pri
     return I;
 }
 
-bool PointLight::isAccessible(Vector3 reflectionPoint, std::shared_ptr<Primitive> intersectedPrimitive,
-                              std::list<std::shared_ptr<Primitive>> scenePrimitives) {
+bool PointLight::isAccessible(Vector3 reflectionPoint, const Primitive &intersectedPrimitive,
+                              std::vector<std::shared_ptr<Primitive>> scenePrimitives) {
     Ray primitiveToLight(reflectionPoint, this->position);
     for (const auto &primitive : scenePrimitives) {
-        if(primitive->compareUUID(*intersectedPrimitive)) {
+        if(primitive->compareUUID(intersectedPrimitive)) {
             continue;
         }
         std::vector<Intersection> intersections = primitive.get()->intersect(primitiveToLight);

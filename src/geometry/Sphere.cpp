@@ -2,7 +2,7 @@
 #include <memory>
 #include "Sphere.h"
 
-Sphere::Sphere(Vector3 center, float radius, Material material) : Primitive(material), center(center), radius(radius) {}
+Sphere::Sphere(Vector3 center, float radius, const Material &material) : Primitive(material), center(center), radius(radius) {}
 
 std::vector<Intersection> Sphere::intersect(const Ray &ray) const {
     std::vector<Intersection> intersections;

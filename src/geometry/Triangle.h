@@ -7,12 +7,12 @@
 
 class Triangle : public Primitive {
 public:
-    Vector3 a, b, c;
-    Vector3 normal;
+    Vector3 a = Vector3(0), b = Vector3(0), c = Vector3(0);
+    Vector3 normal = Vector3(0);
 
     Triangle() = default;
-    Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Vector3 &normal, Material material);
-    Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, Material material);
+    Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Vector3 &normal, const Material &material);
+    Triangle(const Vector3 &a, const Vector3 &b, const Vector3 &c, const Material &material);
 
     std::vector<Intersection> intersect(const Ray &ray) const override;
 

@@ -10,7 +10,7 @@
 
 class PointLight : public Light {
 public:
-    Vector3 position;
+    Vector3 position = Vector3(0);
 
     PointLight(const LightIntensity &commonIntensity, const Vector3 &position);
 
@@ -18,11 +18,11 @@ public:
                    const LightIntensity &specularIntensity, const Vector3 &position);
 
     LightIntensity
-    calculateLightIntensity(std::list<std::shared_ptr<Primitive>> scenePrimitives, Vector3 cameraPosition,
-                            std::shared_ptr<Primitive> intersectedPrimitive, Intersection intersection) override;
+    calculateLightIntensity(std::vector<std::shared_ptr<Primitive>> scenePrimitives, Vector3 cameraPosition,
+                            const Primitive &intersectedPrimitive, Intersection intersection) override;
 
-    bool isAccessible(Vector3 reflectionPoint, std::shared_ptr<Primitive> intersectedPrimitive,
-                      std::list<std::shared_ptr<Primitive>> scenePrimitives) override;
+    bool isAccessible(Vector3 reflectionPoint, const Primitive &intersectedPrimitive,
+                      std::vector<std::shared_ptr<Primitive>> scenePrimitives) override;
 };
 
 

@@ -9,8 +9,8 @@
 
 class Scene {
 public:
-    std::list<std::shared_ptr<Primitive>> primitives;
-    std::list<std::shared_ptr<Light>> lights;
+    std::vector<std::shared_ptr<Primitive>> primitives;
+    std::vector<std::shared_ptr<Light>> lights;
 
     Scene() = default;
 

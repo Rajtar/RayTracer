@@ -1,4 +1,6 @@
 #include <cmath>
+#include <smmintrin.h>
+#include <iostream>
 #include "Vector3.h"
 
 Vector3::Vector3(const Vector3 &p1, const Vector3 &p2) {
@@ -7,9 +9,9 @@ Vector3::Vector3(const Vector3 &p1, const Vector3 &p2) {
     this->z = p2.z - p1.z;
 }
 
-Vector3::Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
+Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
 
-Vector3::Vector3(double xyz) : x(xyz), y(xyz), z(xyz) {}
+Vector3::Vector3(float xyz) : x(xyz), y(xyz), z(xyz){}
 
 Vector3 Vector3::normalized() const {
     double magnitude = getMagnitude();

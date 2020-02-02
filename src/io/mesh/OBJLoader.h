@@ -7,7 +7,7 @@
 class OBJLoader : public MeshLoader {
 public:
     void loadMesh(const std::string &filePath, std::shared_ptr<Mesh> targetMesh, bool loadNormals,
-                  const Vector3 &positionOffset = Vector3()) override;
+                  const Vector3 &positionOffset = Vector3(0)) override;
 
 private:
     std::vector<Vector3> vertices;

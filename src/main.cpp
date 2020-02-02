@@ -21,13 +21,13 @@ int main() {
     const unsigned int width = 1000,
                        height = 1000;
 
-    OBJLoader loader;
+//    OBJLoader loader;
 
     BitmapImage colorfulBMP("../textures/colorful.bmp");
-    BitmapImage checkerBMP("../textures/checker.bmp");
+//    BitmapImage checkerBMP("../textures/checker.bmp");
 
     Texture colorfulTexture(colorfulBMP);
-    Texture checkerTexture(checkerBMP);
+//    Texture checkerTexture(checkerBMP);
 
     Material red(LightIntensity(1, 0, 0), LightIntensity(1, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
     Material blue(LightIntensity(0, 0, 1), LightIntensity(0, 0, 0), LightIntensity(0.8, 0.8, 0.8), 0.9);
@@ -37,7 +37,7 @@ int main() {
     Material reflective(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9, 1.5, Reflective);
     Material refractive(LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9, 4, Refractive);
     Material colorful(colorfulTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
-    Material checker(checkerTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
+//    Material checker(checkerTexture, LightIntensity(1, 1, 1), LightIntensity(1, 1, 1), LightIntensity(0.8, 0.8, 0.8), 0.9);
 
     std::shared_ptr<Mesh> mesh(new Mesh(red));
     std::shared_ptr<Plane> floor(new Plane(Vector3(0, -10, 0), Vector3(0, 1, 0), yellow));
@@ -64,9 +64,9 @@ int main() {
     scene.addLight(whiteLight);
 
     PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);
-    std::unique_ptr<Image> image(new BitmapImage(width, height));
+    BitmapImage image(width, height);
 
-    image->writeAll(86, 151, 255);
+    image.writeAll(86, 151, 255);
 
     std::cout << "Rendering scene with: " << scene.primitives.size() << (scene.primitives.size() == 1 ? " object\n" : " objects\n") ;
     auto startTime = std::chrono::system_clock::now();
@@ -77,7 +77,7 @@ int main() {
     std::cout<< "Rendering took: " << elapsedSeconds.count() << "s\n";
 
     std::string fileName = currentDateTime() + ".bmp";
-    image->saveToFile(fileName);
+    image.saveToFile(fileName);
 
     std::cout<< "Saved image as: " << fileName << std::endl;
     return 0;

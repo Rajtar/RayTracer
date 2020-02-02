@@ -6,12 +6,13 @@
 
 class Ray {
 public:
-    Vector3 origin,
-            target,
-           direction;
+    Vector3 origin = Vector3(0),
+            target = Vector3(0),
+            direction = Vector3(0);
 
     Ray(Vector3 origin, Vector3 target);
-    Ray();
+
+    Ray() = default;
 };
 
 

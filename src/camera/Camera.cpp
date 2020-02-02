@@ -12,17 +12,17 @@ Camera::Camera(Vector3 position, Vector3 direction, double viewportDistance, Vec
                                                                                                    viewportDistance),
                                                                                            up(up) {}
 
-void Camera::renderScene(Scene &scene, std::unique_ptr<Image> &targetImage) {
+void Camera::renderScene(Scene &scene, Image &targetImage) {
     if (Settings::AntiAliasingType == None) {
         renderSceneNoneAntiAliasing(scene, targetImage);
     } else if (Settings::AntiAliasingType == MultiSampling) {
-        renderSceneMultisapmleAntiAliasing(scene, targetImage);
+        renderSceneMultisampleAntiAliasing(scene, targetImage);
     }
 }
 
-void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage) {
-    unsigned int imageWidth = targetImage->getWidth();
-    unsigned int imageHeight = targetImage->getHeight();
+void Camera::renderSceneNoneAntiAliasing(const Scene &scene, Image &targetImage) {
+    unsigned int imageWidth = targetImage.getWidth();
+    unsigned int imageHeight = targetImage.getHeight();
 
     double pixelHeight = 2.0F / imageWidth;
     double pixelWidth = 2.0F / imageHeight;
@@ -52,15 +52,15 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
                         if (primitive->material.type == Reflective || primitive->material.type == Refractive) {
 
                             pixelColor = calculateRecursivePixelColor(ray, currentIntersection,
-                                                                      primitive, scene, 10);
+                                                                      *primitive, scene, 10);
                         } else {
-                            pixelColor = calculatePixelColor(scene, primitive, currentIntersection);
+                            pixelColor = calculatePixelColor(scene, *primitive, currentIntersection);
                         }
                     }
                 }
             }
             if (intersected) {
-                targetImage->writePixel(x, y, pixelColor);
+                targetImage.writePixel(x, y, pixelColor);
             }
         }
     }
@@ -69,9 +69,9 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
 #endif
 }
 
-void Camera::renderSceneMultisapmleAntiAliasing(Scene &scene, std::unique_ptr<Image> &targetImage) {
-    unsigned int imageWidth = targetImage->getWidth();
-    unsigned int imageHeight = targetImage->getHeight();
+void Camera::renderSceneMultisampleAntiAliasing(Scene &scene, Image &targetImage) {
+    unsigned int imageWidth = targetImage.getWidth();
+    unsigned int imageHeight = targetImage.getHeight();
 
     double pixelHeight = 2.0F / imageWidth;
     double pixelWidth = 2.0F / imageHeight;
@@ -98,12 +98,12 @@ void Camera::renderSceneMultisapmleAntiAliasing(Scene &scene, std::unique_ptr<Im
                     getRay(xUpperRight, yUpperRight),
                     getRay(xLowerRight, yLowerRight),
             };
-            Vector3 pixelColor;
+            Vector3 pixelColor(0, 0, 0);
             for (const auto &ray : rays) {
                 pixelColor += sampleRay(scene, ray);
             }
             pixelColor /= 5;
-            targetImage->writePixel(x, y, LightIntensity(pixelColor.x, pixelColor.y, pixelColor.z));
+            targetImage.writePixel(x, y, LightIntensity(pixelColor.x, pixelColor.y, pixelColor.z));
         }
     }
 }
@@ -125,23 +125,22 @@ Vector3 Camera::sampleRay(const Scene &scene, const Ray &ray) {
     }
     LightIntensity calculatedColor;
     if (lastPrimitive->material.type != Default) {
-        calculatedColor = calculateRecursivePixelColor(ray, lastIntersection,
-                                                       lastPrimitive, scene, 3);
+        calculatedColor = calculateRecursivePixelColor(ray, lastIntersection, *lastPrimitive, scene, 3);
     } else {
-        calculatedColor = calculatePixelColor(scene, lastPrimitive, lastIntersection);
+        calculatedColor = calculatePixelColor(scene, *lastPrimitive, lastIntersection);
     }
     return Vector3(calculatedColor.r, calculatedColor.g, calculatedColor.b);
 }
 
 LightIntensity Camera::calculatePixelColor(const Scene &scene,
-                                           const std::shared_ptr<Primitive> &intersectedPrimitive,
+                                           const Primitive &intersectedPrimitive,
                                            const Intersection &intersection) {
     int textureX, textureY;
-    const Texture &objectTexture = intersectedPrimitive->material.texture;
+    const Texture &objectTexture = intersectedPrimitive.material.texture;
     LightIntensity textureColor(1, 1, 1);
 
     if (!objectTexture.isEmpty()) {
-        intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(),
+        intersectedPrimitive.getTexelCoordinates(intersection.position, objectTexture.getWidth(),
                                                   objectTexture.getHeight(), textureX, textureY);
         textureColor = objectTexture.getColorAt(textureX, textureY);
     }
@@ -157,26 +156,26 @@ LightIntensity Camera::calculatePixelColor(const Scene &scene,
 
 LightIntensity
 Camera::calculateRecursivePixelColor(Ray ray, Intersection intersection,
-                                     std::shared_ptr<Primitive> intersectedPrimitive,
+                                     const Primitive &intersectedPrimitive,
                                      const Scene &scene, int maxBounces) {
     LightIntensity pixelColor = LightIntensity(0, 0, 1);
-    int i = 0;
+    int bounceCounter = 0;
     bool bounceAllowed = true;
     std::shared_ptr<Primitive> lastHitPrimitive;
     Intersection lastIntersection;
 
-    while (bounceAllowed && i < maxBounces) {
-        Vector3 bounceDirection;
-        if (intersectedPrimitive->material.type == Reflective) {
+    while (bounceAllowed && bounceCounter < maxBounces) {
+        Vector3 bounceDirection(1, 1, 1);
+        if (intersectedPrimitive.material.type == Reflective) {
             bounceDirection = getReflectionVector(ray, intersection);
-        } else if (intersectedPrimitive->material.type == Refractive) {
-            bounceDirection = getTransmissionVector(ray, intersection, intersectedPrimitive->material.refractiveIndex);
+        } else if (intersectedPrimitive.material.type == Refractive) {
+            bounceDirection = getTransmissionVector(ray, intersection, intersectedPrimitive.material.refractiveIndex);
         }
         ray = Ray(intersection.position, intersection.position + bounceDirection);
         double lowestPixelDepth = std::numeric_limits<double>::max();
 
         for (const auto &primitive : scene.primitives) {
-            if (primitive->compareUUID(*intersectedPrimitive) && primitive->material.type != Refractive) {
+            if (primitive->compareUUID(intersectedPrimitive) && primitive->material.type != Refractive) {
                 continue;
             }
             std::vector<Intersection> intersections = primitive->intersect(ray);
@@ -198,11 +197,11 @@ Camera::calculateRecursivePixelColor(Ray ray, Intersection intersection,
                 }
             }
         }
-        i++;
+        bounceCounter++;
         intersection = lastIntersection;
     }
     if (lastHitPrimitive != nullptr) {
-        pixelColor = calculatePixelColor(scene, lastHitPrimitive, intersection);
+        pixelColor = calculatePixelColor(scene, *lastHitPrimitive, intersection);
     }
     return pixelColor;
 }

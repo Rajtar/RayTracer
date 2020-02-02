@@ -10,10 +10,10 @@
 class Plane : public Primitive {
 public:
     /// Point that the plane contains
-    Vector3 point;
-    Vector3 normal;
+    Vector3 point = Vector3(0);
+    Vector3 normal = Vector3(0);
 
-    Plane(const Vector3 &point, const Vector3 &normal, Material material);
+    Plane(const Vector3 &point, const Vector3 &normal, const Material &material);
 
     std::vector<Intersection> intersect(const Ray &ray) const override;
 

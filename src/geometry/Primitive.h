@@ -13,7 +13,7 @@ public:
 
     Primitive();
 
-    explicit Primitive(Material material);
+    explicit Primitive(const Material &material);
 
     virtual std::vector<Intersection> intersect(const Ray &ray) const = 0;
 

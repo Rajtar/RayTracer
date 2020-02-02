@@ -10,7 +10,7 @@ class Mesh : public Primitive {
 public:
     std::vector<Triangle> faces;
 
-    Mesh(Material material);
+    Mesh(const Material &material);
 
     std::vector<Intersection> intersect(const Ray &ray) const override;
 

@@ -4,7 +4,7 @@
 
 Primitive::Primitive() {UUID = UUIDGenerator::generateUUID();}
 
-Primitive::Primitive(Material material) : material(material) {UUID = UUIDGenerator::generateUUID();}
+Primitive::Primitive(const Material &material) : material(material) { UUID = UUIDGenerator::generateUUID();}
 
 LightIntensity Primitive::getDiffuse() const {
     return material.diffuse;

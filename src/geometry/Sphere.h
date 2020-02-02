@@ -9,10 +9,10 @@
 
 class Sphere : public Primitive {
 public:
-    Vector3 center;
-    float radius;
+    Vector3 center = Vector3(0);
+    float radius = 0;
 
-    Sphere(Vector3 center, float radius, Material material);
+    Sphere(Vector3 center, float radius, const Material &material);
 
     std::vector<Intersection> intersect(const Ray &ray) const override;
 
