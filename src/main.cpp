@@ -18,8 +18,8 @@ const std::string currentDateTime();
 void drawGrid(Image &image, int density, unsigned char color);
 
 int main() {
-    const unsigned int width = 2000,
-                       height = 2000;
+    const unsigned int width = 1000,
+                       height = 1000;
 
     OBJLoader loader;
 
@@ -42,7 +42,7 @@ int main() {
     std::shared_ptr<Mesh> mesh(new Mesh(red));
     std::shared_ptr<Plane> floor(new Plane(Vector3(0, -10, 0), Vector3(0, 1, 0), yellow));
     std::shared_ptr<Plane> roof(new Plane(Vector3(0, 15, 0), Vector3(0, -1, 0), blue));
-    std::shared_ptr<Plane> backWall(new Plane(Vector3(0, 0, 40), Vector3(0, 0, -1), white));
+    std::shared_ptr<Plane> backWall(new Plane(Vector3(0, 0, 40), Vector3(0, 0, -1), colorful));
     std::shared_ptr<Plane> rightWall(new Plane(Vector3(15, 0, 0), Vector3(-1, 0, 0), green));
     std::shared_ptr<Plane> leftWall(new Plane(Vector3(-15, 0, 0), Vector3(1, 0, 0), red));
     std::shared_ptr<Sphere> sphere1(new Sphere(Vector3(6, -2, 32), 5, refractive));
@@ -55,20 +55,18 @@ int main() {
                            Vector3(0, 9, 30)));
 
     Scene scene;
-    scene.addPrimitive(sphere1);
     scene.addPrimitive(sphere2);
     scene.addPrimitive(floor);
     scene.addPrimitive(roof);
+    scene.addPrimitive(backWall);
     scene.addPrimitive(rightWall);
     scene.addPrimitive(leftWall);
-    scene.addPrimitive(backWall);
-//    scene.addPrimitive(mesh);
     scene.addLight(whiteLight);
 
     PerspectiveCamera camera(Vector3(0, 0, 0), Vector3(0, 0, 0), 2);
     std::unique_ptr<Image> image(new BitmapImage(width, height));
 
-    image.get()->writeAll(86, 151, 255);
+    image->writeAll(86, 151, 255);
 
     std::cout << "Rendering scene with: " << scene.primitives.size() << (scene.primitives.size() == 1 ? " object\n" : " objects\n") ;
     auto startTime = std::chrono::system_clock::now();

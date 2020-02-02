@@ -19,8 +19,8 @@ public:
     int getHeight() const;
 
 private:
-    int width, height;
     std::vector<LightIntensity> colorMap;
+    int width, height;
 };
 
 

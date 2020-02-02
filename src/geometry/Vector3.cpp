@@ -19,7 +19,7 @@ Vector3 Vector3::normalized() const {
 }
 
 double Vector3::getMagnitude() const {
-    return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+    return sqrt(x*x + y*y + z*z);
 }
 
 double Vector3::dot(const Vector3 &other) const {

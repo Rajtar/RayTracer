@@ -7,15 +7,15 @@
 #define PROGRESS_LOG  true
 
 Camera::Camera(Vector3 position, Vector3 direction, double viewportDistance, Vector3 up) : position(position),
-                                                                                          direction(direction),
-                                                                                          viewportDistance(viewportDistance),
-                                                                                          up(up) {}
+                                                                                           direction(direction),
+                                                                                           viewportDistance(
+                                                                                                   viewportDistance),
+                                                                                           up(up) {}
 
-void Camera::renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage) {
-    if(Settings::AntiAliasingType == None) {
+void Camera::renderScene(Scene &scene, std::unique_ptr<Image> &targetImage) {
+    if (Settings::AntiAliasingType == None) {
         renderSceneNoneAntiAliasing(scene, targetImage);
-    }
-    else if(Settings::AntiAliasingType == MultiSampling) {
+    } else if (Settings::AntiAliasingType == MultiSampling) {
         renderSceneMultisapmleAntiAliasing(scene, targetImage);
     }
 }
@@ -28,11 +28,11 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
     double pixelWidth = 2.0F / imageHeight;
 
     for (unsigned int x = 0; x < imageWidth; x++) {
-        #if PROGRESS_LOG
-            printProgress((float) x, (float) imageWidth);
-        #endif
+#if PROGRESS_LOG
+        printProgress((float) x, (float) imageWidth);
+#endif
+        double xCenter = -1.0F + (x + 0.5F) * pixelWidth;
         for (unsigned int y = 0; y < imageHeight; y++) {
-            double xCenter = -1.0F + (x + 0.5F) * pixelWidth;
             double yCenter = 1.0F - (y + 0.5F) * pixelHeight;
             double lowestPixelDepth = std::numeric_limits<double>::max();
 
@@ -46,15 +46,14 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
                     intersected = true;
                     Intersection currentIntersection = intersections.front();
                     double intersectionDepth = (position - currentIntersection.position).getMagnitude();
-                    if(intersectionDepth < lowestPixelDepth) {
+                    if (intersectionDepth < lowestPixelDepth) {
                         lowestPixelDepth = intersectionDepth;
 
-                        if(primitive->material.type == Reflective || primitive->material.type == Refractive ){
+                        if (primitive->material.type == Reflective || primitive->material.type == Refractive) {
 
                             pixelColor = calculateRecursivePixelColor(ray, currentIntersection,
                                                                       primitive, scene, 10);
-                        }
-                        else {
+                        } else {
                             pixelColor = calculatePixelColor(scene, primitive, currentIntersection);
                         }
                     }
@@ -65,12 +64,12 @@ void Camera::renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Ima
             }
         }
     }
-    #if PROGRESS_LOG
-        std::cout<< " - " << 100 << "%" << std::endl;
-    #endif
+#if PROGRESS_LOG
+    std::cout << " - " << 100 << "%" << std::endl;
+#endif
 }
 
-void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage) {
+void Camera::renderSceneMultisapmleAntiAliasing(Scene &scene, std::unique_ptr<Image> &targetImage) {
     unsigned int imageWidth = targetImage->getWidth();
     unsigned int imageHeight = targetImage->getHeight();
 
@@ -78,89 +77,82 @@ void Camera::renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_
     double pixelWidth = 2.0F / imageHeight;
 
     for (unsigned int x = 0; x < imageWidth; x++) {
-        #if PROGRESS_LOG
-            printProgress((float) x, (float) imageWidth);
-        #endif
+#if PROGRESS_LOG
+        printProgress((float) x, (float) imageWidth);
+#endif
+        double xUpperLeft = -1.0F + x * pixelWidth;
+        double xLowerLeft = -1.0F + x * pixelWidth;
+        double xCenter = -1.0F + (x + 0.5F) * pixelWidth;
+        double xUpperRight = -1.0F + (x + 1) * pixelWidth;
         for (unsigned int y = 0; y < imageHeight; y++) {
-            double xUpperLeft = -1.0F + x * pixelWidth;
             double yUpperLeft = 1.0F - y * pixelHeight;
-
-            double xLowerLeft = -1.0F + x * pixelWidth;
             double yLowerLeft = 1.0F - (y + 1) * pixelHeight;
-
-            double xCenter = -1.0F + (x + 0.5F) * pixelWidth;
             double yCenter = 1.0F - (y + 0.5F) * pixelHeight;
-
-            double xUpperRight = -1.0F + (x + 1) * pixelWidth;
             double yUpperRight = 1.0F - y * pixelHeight;
-
             double xLowerRight = -1.0F + (x + 1) * pixelWidth;
             double yLowerRight = 1.0F - (y + 1) * pixelHeight;
-
-
-            Ray rays[] {
+            Ray rays[]{
                     getRay(xCenter, yCenter),
                     getRay(xUpperLeft, yUpperLeft),
                     getRay(xLowerLeft, yLowerLeft),
                     getRay(xUpperRight, yUpperRight),
                     getRay(xLowerRight, yLowerRight),
             };
-
-            bool intersected = false;
             Vector3 pixelColor;
             for (const auto &ray : rays) {
-                double lowestPixelDepth = std::numeric_limits<double>::max();
-                Vector3 colorToAdd;
-                for (const auto &primitive : scene.primitives) {
-                    std::vector<Intersection> intersections = primitive->intersect(ray);
-                    if (!intersections.empty()) {
-                        intersected = true;
-                        double intersectionDepth = (position - intersections.front().position).getMagnitude();
-                        if (intersectionDepth < lowestPixelDepth) {
-                            lowestPixelDepth = intersectionDepth;
-                            LightIntensity calculatedColor;
-                            if(primitive->material.type != Default){
-                                calculatedColor = calculateRecursivePixelColor(ray, intersections.front(),
-                                                                               primitive, scene, 3);
-                            }
-                            else {
-                                calculatedColor = calculatePixelColor(scene, primitive, intersections.front());
-                            }
-                            colorToAdd = Vector3(calculatedColor.r, calculatedColor.g, calculatedColor.b);
-                        }
-                    }
-                }
-
-                pixelColor += colorToAdd;
+                pixelColor += sampleRay(scene, ray);
             }
-            if(intersected) {
-                pixelColor /= 5;
-                targetImage->writePixel(x, y, LightIntensity(pixelColor.x, pixelColor.y, pixelColor.z));
-            }
+            pixelColor /= 5;
+            targetImage->writePixel(x, y, LightIntensity(pixelColor.x, pixelColor.y, pixelColor.z));
         }
     }
 }
 
+Vector3 Camera::sampleRay(const Scene &scene, const Ray &ray) {
+    double lowestPixelDepth = std::numeric_limits<double>::max();
+    Intersection lastIntersection;
+    std::shared_ptr<Primitive> lastPrimitive;
+    for (const auto &primitive : scene.primitives) {
+        std::vector<Intersection> intersections = primitive->intersect(ray);
+        if (!intersections.empty()) {
+            double intersectionDepth = (position - intersections.front().position).getMagnitude();
+            if (intersectionDepth < lowestPixelDepth) {
+                lowestPixelDepth = intersectionDepth;
+                lastIntersection = intersections.front();
+                lastPrimitive = primitive;
+            }
+        }
+    }
+    LightIntensity calculatedColor;
+    if (lastPrimitive->material.type != Default) {
+        calculatedColor = calculateRecursivePixelColor(ray, lastIntersection,
+                                                       lastPrimitive, scene, 3);
+    } else {
+        calculatedColor = calculatePixelColor(scene, lastPrimitive, lastIntersection);
+    }
+    return Vector3(calculatedColor.r, calculatedColor.g, calculatedColor.b);
+}
+
 LightIntensity Camera::calculatePixelColor(const Scene &scene,
-                                           std::shared_ptr<Primitive> intersectedPrimitive,
-                                           Intersection intersection) {
-        int textureX, textureY;
-        Texture &objectTexture = intersectedPrimitive->material.texture;
-        LightIntensity textureColor(1, 1, 1);
+                                           const std::shared_ptr<Primitive> &intersectedPrimitive,
+                                           const Intersection &intersection) {
+    int textureX, textureY;
+    const Texture &objectTexture = intersectedPrimitive->material.texture;
+    LightIntensity textureColor(1, 1, 1);
 
-        if (!objectTexture.isEmpty()) {
-            intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(),
-                                                      objectTexture.getHeight(), textureX, textureY);
-            textureColor = objectTexture.getColorAt(textureX, textureY);
-        }
+    if (!objectTexture.isEmpty()) {
+        intersectedPrimitive->getTexelCoordinates(intersection.position, objectTexture.getWidth(),
+                                                  objectTexture.getHeight(), textureX, textureY);
+        textureColor = objectTexture.getColorAt(textureX, textureY);
+    }
 
-        LightIntensity cumulativeIntensity;
-        for (const auto &light : scene.lights) {
-            cumulativeIntensity += light.get()->calculateLightIntensity(scene.primitives, this->position,
-                                                                        intersectedPrimitive,
-                                                                        intersection);
-        }
-        return cumulativeIntensity * textureColor;
+    LightIntensity cumulativeIntensity;
+    for (const auto &light : scene.lights) {
+        cumulativeIntensity += light.get()->calculateLightIntensity(scene.primitives, this->position,
+                                                                    intersectedPrimitive,
+                                                                    intersection);
+    }
+    return cumulativeIntensity * textureColor;
 }
 
 LightIntensity
@@ -173,23 +165,24 @@ Camera::calculateRecursivePixelColor(Ray ray, Intersection intersection,
     std::shared_ptr<Primitive> lastHitPrimitive;
     Intersection lastIntersection;
 
-    while(bounceAllowed && i < maxBounces) {
+    while (bounceAllowed && i < maxBounces) {
         Vector3 bounceDirection;
-        if(intersectedPrimitive->material.type == Reflective) {
+        if (intersectedPrimitive->material.type == Reflective) {
             bounceDirection = getReflectionVector(ray, intersection);
-        } else if(intersectedPrimitive->material.type == Refractive) {
+        } else if (intersectedPrimitive->material.type == Refractive) {
             bounceDirection = getTransmissionVector(ray, intersection, intersectedPrimitive->material.refractiveIndex);
         }
         ray = Ray(intersection.position, intersection.position + bounceDirection);
         double lowestPixelDepth = std::numeric_limits<double>::max();
 
         for (const auto &primitive : scene.primitives) {
-            if(primitive->compareUUID(*intersectedPrimitive) && primitive->material.type != Refractive) {
+            if (primitive->compareUUID(*intersectedPrimitive) && primitive->material.type != Refractive) {
                 continue;
             }
             std::vector<Intersection> intersections = primitive->intersect(ray);
             if (!intersections.empty()) {
-                Intersection currentIntersection = primitive->material.type == Refractive ? intersections.back() : intersections.front();
+                Intersection currentIntersection =
+                        primitive->material.type == Refractive ? intersections.back() : intersections.front();
 
                 float intersectionDistance = (intersection.position - currentIntersection.position).getMagnitude();
                 if (fabs(intersectionDistance) < 0.1) {
@@ -197,7 +190,7 @@ Camera::calculateRecursivePixelColor(Ray ray, Intersection intersection,
                 }
 
                 double intersectionDepth = (intersection.position - currentIntersection.position).getMagnitude();
-                if(intersectionDepth < lowestPixelDepth) {
+                if (intersectionDepth < lowestPixelDepth) {
                     lowestPixelDepth = intersectionDepth;
                     lastIntersection = currentIntersection;
                     lastHitPrimitive = primitive;
@@ -208,7 +201,7 @@ Camera::calculateRecursivePixelColor(Ray ray, Intersection intersection,
         i++;
         intersection = lastIntersection;
     }
-    if(lastHitPrimitive != nullptr) {
+    if (lastHitPrimitive != nullptr) {
         pixelColor = calculatePixelColor(scene, lastHitPrimitive, intersection);
     }
     return pixelColor;
@@ -228,12 +221,9 @@ Camera::getTransmissionVector(const Ray &ray, const Intersection &intersection, 
     float originRefractiveIndex = 1;
     Vector3 normal = intersection.normal;
 
-    if(cosI < 0)
-    {
+    if (cosI < 0) {
         cosI = -cosI;
-    }
-    else
-    {
+    } else {
         std::swap(originRefractiveIndex, targetRefractiveIndex);
         normal = -intersection.normal;
     }
@@ -244,8 +234,8 @@ Camera::getTransmissionVector(const Ray &ray, const Intersection &intersection, 
 }
 
 void Camera::printProgress(float now, float total) {
-    float progress =  (now / total) * 100;
-    if(fmodf(progress, 10) == 0) {
+    float progress = (now / total) * 100;
+    if (fmodf(progress, 10) == 0) {
         std::cout << " - " << progress << "%\r";
         std::cout.flush();
     }

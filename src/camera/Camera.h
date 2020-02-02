@@ -18,15 +18,15 @@ public:
     Camera(Vector3 position, Vector3 direction, double viewportDistance, Vector3 up = Vector3(0, 1, 0));
     Camera() = default;
 
-    virtual void renderScene(const Scene &scene, std::unique_ptr<Image> &targetImage);
+    virtual void renderScene(Scene &scene, std::unique_ptr<Image> &targetImage);
     virtual Ray getRay(double xCenter, double yCenter) = 0;
 
 private:
     virtual void renderSceneNoneAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
-    virtual void renderSceneMultisapmleAntiAliasing(const Scene &scene, std::unique_ptr<Image> &targetImage);
+    virtual void renderSceneMultisapmleAntiAliasing(Scene &scene, std::unique_ptr<Image> &targetImage);
     LightIntensity calculatePixelColor(const Scene &scene,
-                                       std::shared_ptr<Primitive> intersectedPrimitive,
-                                       Intersection intersection);
+                                       const std::shared_ptr<Primitive>& intersectedPrimitive,
+                                       const Intersection &intersection);
     LightIntensity
     calculateRecursivePixelColor(Ray ray, Intersection intersection, std::shared_ptr<Primitive> intersectedPrimitive,
                                  const Scene &scene, int maxBounces);
@@ -34,6 +34,8 @@ private:
 
     Vector3 getReflectionVector(const Ray &ray, const Intersection &intersection) const;
     Vector3 getTransmissionVector(const Ray &ray, const Intersection &intersection, float targetRefractiveIndex) const;
+
+    Vector3 sampleRay(const Scene &scene, const Ray &ray);
 };
 
 

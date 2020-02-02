@@ -2,7 +2,6 @@
 #define RENDERER_OBJLOADER_H
 
 
-#include <bits/shared_ptr.h>
 #include "MeshLoader.h"
 
 class OBJLoader : public MeshLoader {
